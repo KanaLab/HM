@@ -1614,6 +1614,12 @@ TComPPS::TComPPS()
 , m_cabacInitPresentFlag             (false)
 , m_sliceHeaderExtensionPresentFlag  (false)
 , m_loopFilterAcrossSlicesEnabledFlag(false)
+, m_deblockingFilterControlPresentFlag(false)
+, m_deblockingFilterOverrideEnabledFlag(false)
+, m_ppsDeblockingFilterDisabledFlag  (false)
+, m_deblockingFilterBetaOffsetDiv2   (0)
+, m_deblockingFilterTcOffsetDiv2     (0)
+, m_scalingListPresentFlag           (false)
 , m_listsModificationPresentFlag     (0)
 , m_numExtraSliceHeaderBits          (0)
 {
@@ -1787,6 +1793,8 @@ TComScalingList::TComScalingList()
     for(UInt listId = 0; listId < SCALING_LIST_NUM; listId++)
     {
       m_scalingListCoef[sizeId][listId].resize(min<Int>(MAX_MATRIX_COEF_NUM,(Int)g_scalingListSize[sizeId]));
+      m_scalingListDC[sizeId][listId] = 0;
+      m_refMatrixId[sizeId][listId] = 0;
     }
   }
 }
