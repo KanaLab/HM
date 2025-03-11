@@ -202,6 +202,7 @@ public:
 
   const Window& getConformanceWindow() const { return m_picSym.getSPS().getConformanceWindow(); }
   Window        getDefDisplayWindow() const  { return m_picSym.getSPS().getVuiParametersPresentFlag() ? m_picSym.getSPS().getVuiParameters()->getDefaultDisplayWindow() : Window(); }
+  BitDepths     getBitDepths() const         { return m_picSym.getSPS().getBitDepths(); }
 
   Bool          getSAOMergeAvailability(Int currAddr, Int mergeAddr);
 
