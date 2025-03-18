@@ -117,6 +117,10 @@ public:
 #if JVET_AE0101_PHASE_INDICATION_SEI_MESSAGE
     PHASE_INDICATION                     = 212,
 #endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+    ENCODER_OPTIMIZATION_INFO = 215,
+#endif
+    
   };
 
   SEI() {}
@@ -964,6 +968,52 @@ public:
   virtual ~SEIFisheyeVideoInfo() {}
   TComSEIFisheyeVideoInfo values;
 };
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+class SEIEncoderOptimizationInfo : public SEI
+{
+public:
+  PayloadType payloadType() const { return PayloadType::ENCODER_OPTIMIZATION_INFO; }
+  SEIEncoderOptimizationInfo()
+    : m_cancelFlag(false)
+    , m_persistenceFlag(false)
+    , m_forHumanViewingIdc(0)
+    , m_forMachineAnalysisIdc(0)
+    , m_type(0)
+    , m_objectBasedIdc(0)
+    , m_quantThresholdDelta(0)
+    , m_picQuantObjectFlag(false)
+    , m_temporalResamplingTypeFlag(false)
+    , m_srcPicFlag(false)
+    , m_numIntPics(0)
+    , m_origPicDimensionsFlag(false)
+    , m_origPicWidth(0)
+    , m_origPicHeight(0)
+    , m_spatialResamplingTypeFlag(false)
+    , m_privacyProtectionTypeIdc(0)
+    , m_privacyProtectedInfoType(0)
+  {}
+  virtual ~SEIEncoderOptimizationInfo() {}
+
+  bool     m_cancelFlag;
+  bool     m_persistenceFlag;
+  uint32_t m_forHumanViewingIdc;
+  uint32_t m_forMachineAnalysisIdc;
+  uint32_t m_type;
+  uint32_t m_objectBasedIdc;
+  uint32_t m_quantThresholdDelta;
+  bool     m_picQuantObjectFlag;
+  bool     m_temporalResamplingTypeFlag;
+  bool     m_srcPicFlag;
+  uint32_t m_numIntPics;
+  bool     m_origPicDimensionsFlag;
+  uint32_t m_origPicWidth;
+  uint32_t m_origPicHeight;
+  bool     m_spatialResamplingTypeFlag;
+  uint32_t m_privacyProtectionTypeIdc;
+  uint32_t m_privacyProtectedInfoType;
+
+};
+#endif
 
 #if SHUTTER_INTERVAL_SEI_MESSAGE
 class SEIShutterIntervalInfo : public SEI

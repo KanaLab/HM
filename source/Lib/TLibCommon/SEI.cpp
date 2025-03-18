@@ -91,6 +91,10 @@ const std::vector<SEI::PayloadType> SEI::prefix_sei_messages({
 #if JVET_AE0101_PHASE_INDICATION_SEI_MESSAGE
   , SEI::PHASE_INDICATION
 #endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+   , SEI::ENCODER_OPTIMIZATION_INFO
+#endif
+
 });
 
 const std::vector<SEI::PayloadType> SEI::suffix_sei_messages({
@@ -101,6 +105,9 @@ const std::vector<SEI::PayloadType> SEI::suffix_sei_messages({
   SEI::POST_FILTER_HINT,
   SEI::DECODED_PICTURE_HASH,
   SEI::CODED_REGION_COMPLETION,
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  SEI::ENCODER_OPTIMIZATION_INFO,
+#endif
 });
 
 const std::vector<SEI::PayloadType> SEI::regional_nesting_sei_messages({
@@ -378,6 +385,10 @@ const TChar *SEI::getSEIMessageString(SEI::PayloadType payloadType)
 #if JVET_AE0101_PHASE_INDICATION_SEI_MESSAGE
     case SEI::PHASE_INDICATION:                     return "Phase Indication";
 #endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+    case SEI::ENCODER_OPTIMIZATION_INFO:            return "Encoder optimization information";
+#endif
+
     default:                                        return "Unknown";
   }
 }

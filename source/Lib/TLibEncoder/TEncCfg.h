@@ -469,6 +469,27 @@ protected:
   UInt                    m_siiSEITimeScale;
   std::vector<UInt>       m_siiSEISubLayerNumUnitsInSI;
 #endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  // Encoder Optimization Information SEI
+  Bool  m_eoiSEIEnabled;
+  Bool  m_eoiSEICancelFlag;
+  Bool  m_eoiSEIPersistenceFlag;
+  uint32_t  m_eoiSEIForHumanViewingIdc;
+  uint32_t  m_eoiSEIForMachineAnalysisIdc;
+  uint32_t m_eoiSEIType;
+  uint32_t m_eoiSEIObjectBasedIdc;
+  uint32_t m_eoiSEIQuantThresholdDelta;
+  Bool     m_eoiSEIPicQuantObjectFlag;
+  Bool m_eoiSEITemporalResamplingTypeFlag;
+  uint32_t m_eoiSEINumIntPics;
+  Bool     m_eoiSEISrcPicFlag; ;
+  Bool     m_eoiSEIOrigPicDimensionsFlag;
+  uint32_t m_eoiSEIOrigPicWidth;
+  uint32_t m_eoiSEIOrigPicHeight;
+  Bool m_eoiSEISpatialResamplingTypeFlag;
+  uint32_t m_eoiSEIPrivacyProtectionTypeIdc;
+  uint32_t m_eoiSEIPrivacyProtectedInfoType;
+#endif
 #if SEI_ENCODER_CONTROL
   // film grain characterstics sei
   Bool      m_fgcSEIEnabled;
@@ -1075,7 +1096,44 @@ public:
   Double   getCcvSEIMaxLuminanceValue  ()                            { return m_ccvSEIMaxLuminanceValue;  }
   Void     setCcvSEIAvgLuminanceValue  (Double dValue)               { m_ccvSEIAvgLuminanceValue = dValue; }
   Double   getCcvSEIAvgLuminanceValue  ()                            { return m_ccvSEIAvgLuminanceValue;  }
-
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  Void     setEOISEIEnabled(bool enabledFlag) { m_eoiSEIEnabled = enabledFlag; }
+  Bool     getEOISEIEnabled() const { return m_eoiSEIEnabled; }
+  Void     setEOISEICancelFlag(bool cancelFlag) { m_eoiSEICancelFlag = cancelFlag; }
+  Bool     getEOISEICancelFlag() const { return m_eoiSEICancelFlag; }
+  Void     setEOISEIPersistenceFlag(bool persistenceFlag) { m_eoiSEIPersistenceFlag = persistenceFlag; }
+  Bool     getEOISEIPersistenceFlag() const { return m_eoiSEIPersistenceFlag; }
+  Void     setEOISEIForHumanViewingIdc(uint32_t forHumanViewingIdc) { m_eoiSEIForHumanViewingIdc = forHumanViewingIdc; }
+  uint32_t getEOISEIForHumanViewingIdc() const { return m_eoiSEIForHumanViewingIdc; }
+  Void     setEOISEIForMachineAnalysisIdc(uint32_t forMachineAnalysisIdc) { m_eoiSEIForMachineAnalysisIdc = forMachineAnalysisIdc; }
+  uint32_t getEOISEIForMachineAnalysisIdc() const { return m_eoiSEIForMachineAnalysisIdc; }
+  Void     setEOISEIType(uint32_t eoiType) { m_eoiSEIType = eoiType; }
+  uint32_t getEOISEIType() const { return m_eoiSEIType; }
+  Void     setEOISEIObjectBasedIdc(uint32_t objectBasedIdc) { m_eoiSEIObjectBasedIdc = objectBasedIdc; }
+  uint32_t getEOISEIObjectBasedIdc() const { return m_eoiSEIObjectBasedIdc; }
+  Void     setEOISEIQuantThresholdDelta(uint32_t quantThresholdDelta) { m_eoiSEIQuantThresholdDelta = quantThresholdDelta; }
+  uint32_t getEOISEIQuantThresholdDelta() const { return m_eoiSEIQuantThresholdDelta; }
+  Void     setEOISEIPicQuantObjectFlag(bool picQuantObjectFlag) { m_eoiSEIPicQuantObjectFlag = picQuantObjectFlag; }
+  Bool     getEOISEIPicQuantObjectFlag() const { return m_eoiSEIPicQuantObjectFlag; }
+  Void     setEOISEITemporalResamplingTypeFlag(bool temporalResamplingTypeFlag) { m_eoiSEITemporalResamplingTypeFlag = temporalResamplingTypeFlag; }
+  Bool     getEOISEITemporalResamplingTypeFlag() const { return m_eoiSEITemporalResamplingTypeFlag; }
+  Void     setEOISEISrcPicFlag(bool srcPicFlag) { m_eoiSEISrcPicFlag = srcPicFlag; }
+  Bool     getEOISEISrcPicFlag() const { return m_eoiSEISrcPicFlag; }
+  Void     setEOISEINumIntPics(uint32_t numIntPics) { m_eoiSEINumIntPics = numIntPics; }
+  uint32_t getEOISEINumIntPics() const { return m_eoiSEINumIntPics; }
+  Void     setEOISEIOrigPicDimensionsFlag(bool origPicDimensionsFlag) { m_eoiSEIOrigPicDimensionsFlag = origPicDimensionsFlag; }
+  Bool     getEOISEIOrigPicDimensionsFlag() { return m_eoiSEIOrigPicDimensionsFlag; }
+  Void     setEOISEIOrigPicWidth(uint32_t origPicWidth) { m_eoiSEIOrigPicWidth = origPicWidth; }
+  uint32_t getEOISEIOrigPicWidth() { return m_eoiSEIOrigPicWidth; }
+  Void     setEOISEIOrigPicHeight(uint32_t origPicHeight) { m_eoiSEIOrigPicHeight = origPicHeight; }
+  uint32_t getEOISEIOrigPicHeight() { return m_eoiSEIOrigPicHeight; }
+  Void     setEOISEISpatialResamplingTypeFlag(bool spatialResamplingTypeFlag) { m_eoiSEISpatialResamplingTypeFlag = spatialResamplingTypeFlag; }
+  Bool     getEOISEISpatialResamplingTypeFlag() const { return m_eoiSEISpatialResamplingTypeFlag; }
+  Void     setEOISEIPrivacyProtectionTypeIdc(uint32_t privacyProtectionTypeIdc) { m_eoiSEIPrivacyProtectionTypeIdc = privacyProtectionTypeIdc; }
+  uint32_t getEOISEIPrivacyProtectionTypeIdc() const { return m_eoiSEIPrivacyProtectionTypeIdc; }
+  Void     setEOISEIPrivacyProtectedInfoType(uint32_t privacyProtectedInfoType) { m_eoiSEIPrivacyProtectedInfoType = privacyProtectedInfoType; }
+  uint32_t getEOISEIPrivacyProtectedInfoType() const { return m_eoiSEIPrivacyProtectedInfoType; }
+#endif
   #if SHUTTER_INTERVAL_SEI_MESSAGE
   Void     setSiiSEIEnabled(Bool b)                                  { m_siiSEIEnabled = b; }
   Bool     getSiiSEIEnabled()                                        { return m_siiSEIEnabled; }

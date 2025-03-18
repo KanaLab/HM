@@ -533,7 +533,14 @@ Void TEncGOP::xCreateIRAPLeadingSEIMessages (SEIMessages& seiMessages, const TCo
     seiMessages.push_back(seiShutterInterval);
   }
 #endif
-
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  if (m_pcCfg->getEOISEIEnabled())
+  {
+    SEIEncoderOptimizationInfo *eoiSEI = new SEIEncoderOptimizationInfo;
+    m_seiEncoder.initSEIEncoderOptimizationInfo(eoiSEI);
+    seiMessages.push_back(eoiSEI);
+  }
+#endif
 #if SEI_ENCODER_CONTROL
 #if JVET_X0048_X0103_FILM_GRAIN
   if (m_pcCfg->getFilmGrainCharactersticsSEIEnabled() && !m_pcCfg->getFilmGrainCharactersticsSEIPerPictureSEI())

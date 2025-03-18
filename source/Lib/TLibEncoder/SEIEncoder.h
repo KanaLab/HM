@@ -88,6 +88,9 @@ public:
 #if SHUTTER_INTERVAL_SEI_MESSAGE
   Void initSEIShutterIntervalInfo(SEIShutterIntervalInfo *sei);
 #endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  void initSEIEncoderOptimizationInfo(SEIEncoderOptimizationInfo *sei);
+#endif
 #if SEI_ENCODER_CONTROL
   Void initSEIFilmGrainCharacteristics(SEIFilmGrainCharacteristics *sei);
   Void initSEIContentLightLevel(SEIContentLightLevelInfo *sei);

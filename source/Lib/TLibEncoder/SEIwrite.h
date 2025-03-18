@@ -146,7 +146,10 @@ protected:
     return 2 * n + 1;
   }
 #endif 
-
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  void xWriteSEIEncoderOptimizationInfo           (const SEIEncoderOptimizationInfo &sei);
+#endif
+ 
 #if SHUTTER_INTERVAL_SEI_MESSAGE
   Void xWriteSEIShutterInterval                   (const SEIShutterIntervalInfo& sei);
 #endif

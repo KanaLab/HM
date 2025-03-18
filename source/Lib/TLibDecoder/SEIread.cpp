@@ -407,6 +407,12 @@ Void SEIReader::xReadSEIPayloadData(Int const payloadType, Int const payloadSize
       xParseSEIPhaseIndication((SEIPhaseIndication &) *sei, payloadSize, pDecodedMessageOutputStream);
       break;
 #endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+    case SEI::PayloadType::ENCODER_OPTIMIZATION_INFO:
+      sei = new SEIEncoderOptimizationInfo;
+      xParseSEIEncoderOptimizationInfo((SEIEncoderOptimizationInfo &)*sei, payloadSize, pDecodedMessageOutputStream);
+      break;
+#endif
     default:
       for (UInt i = 0; i < payloadSize; i++)
       {
@@ -1589,7 +1595,82 @@ Void SEIReader::xParseSEIContentColourVolume(SEIContentColourVolume& sei, UInt p
     }
   }
 }
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+void SEIReader::xParseSEIEncoderOptimizationInfo(SEIEncoderOptimizationInfo& sei, uint32_t payloadSize, std::ostream* pDecodedMessageOutputStream)
+{
+  uint32_t val;
+  output_sei_message_header(sei, pDecodedMessageOutputStream, payloadSize);
+  sei_read_flag(pDecodedMessageOutputStream, val, "eoi_cancel_flag");
+  sei.m_cancelFlag = val;
+  if (!sei.m_cancelFlag)
+  {
+    sei_read_flag(pDecodedMessageOutputStream, val, "eoi_persistence_flag");
+    sei.m_persistenceFlag = val;
+    sei_read_code(pDecodedMessageOutputStream, 2, val, "eoi_for_human_viewing_idc");
+    sei.m_forHumanViewingIdc = val;
+    sei_read_code(pDecodedMessageOutputStream, 2, val, "eoi_for_machine_analysis_idc");
+    sei.m_forMachineAnalysisIdc = val;
+    sei_read_code(pDecodedMessageOutputStream, 2, val, "eoi_reserved_zero_2bits");
+    
+    sei_read_code(pDecodedMessageOutputStream, 16, val, "eoi_type");
+    sei.m_type = val;
+    if ((sei.m_type & EOI_OptimizationType::OBJECT_BASED_OPTIMIZATION) != 0)
+    {
+      sei_read_code(pDecodedMessageOutputStream, 16, val, "eoi_object_based_idc");
+      sei.m_objectBasedIdc = val;
+      if (sei.m_objectBasedIdc & EOI_OBJECT_BASED::COARSER_QUANTIZATION)
+      {
+        sei_read_uvlc(pDecodedMessageOutputStream, val, "eoi_quant_threshold_delta");
+        sei.m_quantThresholdDelta = val;
+        if (sei.m_quantThresholdDelta > 0)
+        {
+          sei_read_flag(pDecodedMessageOutputStream, val, "eoi_pic_quant_object_flag");
+          sei.m_picQuantObjectFlag = val;
+        }
+      }
+    }
+    if ((sei.m_type & EOI_OptimizationType::TEMPORAL_RESAMPLING) != 0)
+    {
+      sei_read_flag(pDecodedMessageOutputStream, val, "eoi_temporal_resampling_type_flag");
+      sei.m_temporalResamplingTypeFlag = val;
+      sei_read_uvlc(pDecodedMessageOutputStream, val, "eoi_num_int_pics");
+      sei.m_numIntPics = val;
+      if (sei.m_temporalResamplingTypeFlag && sei.m_numIntPics > 0)
+      {
+        sei_read_flag(pDecodedMessageOutputStream, val, "eoi_src_pic_flag");
+        sei.m_srcPicFlag = val;
+      }
+    }
 
+    if ((sei.m_type & EOI_OptimizationType::SPATIAL_RESAMPLING) != 0)
+    {
+      sei_read_flag(pDecodedMessageOutputStream, val, "eoi_orig_pic_dimensions_flag");
+      sei.m_origPicDimensionsFlag = val;
+      if (sei.m_origPicDimensionsFlag)
+      {
+        sei_read_code(pDecodedMessageOutputStream, 16, val, "eoi_orig_pic_width");
+        sei.m_origPicWidth = val;
+        sei_read_code(pDecodedMessageOutputStream, 16, val, "eoi_orig_pic_height");
+        sei.m_origPicHeight = val;
+      }
+      else
+      {
+        sei_read_flag(pDecodedMessageOutputStream, val, "eoi_spatial_resampling_type_flag");
+        sei.m_spatialResamplingTypeFlag = val;
+      }
+    }
+
+    if ((sei.m_type & EOI_OptimizationType::PRIVACY_PROTECTION_OPTIMIZATION) != 0)
+    {
+      sei_read_code(pDecodedMessageOutputStream, 16, val, "eoi_privacy_protection_type_idc");
+      sei.m_privacyProtectionTypeIdc = val;
+      sei_read_code(pDecodedMessageOutputStream, 8, val, "eoi_privacy_protected_info_type");
+      sei.m_privacyProtectedInfoType = val;
+    }
+  }
+}
+
+#endif
 #if SHUTTER_INTERVAL_SEI_MESSAGE
 Void SEIReader::xParseSEIShutterInterval(SEIShutterIntervalInfo& sei, UInt payloadSize, std::ostream *pDecodedMessageOutputStream)
 {
