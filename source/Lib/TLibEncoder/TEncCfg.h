@@ -487,6 +487,14 @@ protected:
   UInt                    m_siiSEITimeScale;
   std::vector<UInt>       m_siiSEISubLayerNumUnitsInSI;
 #endif
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  bool m_sptiSEIEnabled;
+  bool m_sptiSourceTimingEqualsOutputTimingFlag;
+  uint32_t m_sptiSourceType;
+  uint32_t m_sptiTimeScale;
+  uint32_t m_sptiNumUnitsInElementalInterval;
+  bool m_sptiDirectionFlag;
+#endif
 #if SEI_ENCODER_CONTROL
   // film grain characterstics sei
   Bool      m_fgcSEIEnabled;
@@ -1507,6 +1515,28 @@ public:
   Bool     getSEIPrefixIndicationSEIEnabled() { return m_SEIPrefixIndicationSEIEnabled; }
 #endif
 
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  void setSptiSEIEnabled(bool b) { m_sptiSEIEnabled = b; }
+  bool getSptiSEIEnabled() { return m_sptiSEIEnabled; }
+  void setmSptiSEISourceTimingEqualsOutputTimingFlag(bool b) {
+    m_sptiSourceTimingEqualsOutputTimingFlag = b;
+  }
+  bool getmSptiSEISourceTimingEqualsOutputTimingFlag() {
+    return m_sptiSourceTimingEqualsOutputTimingFlag;
+  }
+  void setmSptiSEISourceType(uint32_t b) { m_sptiSourceType = b; }
+  uint32_t getmSptiSEISourceType() { return m_sptiSourceType; }
+  void setmSptiSEITimeScale(uint32_t b) { m_sptiTimeScale = b; }
+  uint32_t getmSptiSEITimeScale() { return m_sptiTimeScale; }
+  void setmSptiSEINumUnitsInElementalInterval(uint32_t b) {
+    m_sptiNumUnitsInElementalInterval = b;
+  }
+  uint32_t getmSptiSEINumUnitsInElementalInterval() {
+    return m_sptiNumUnitsInElementalInterval;
+  }
+  void setmSptiSEIDirectionFlag(bool b) { m_sptiDirectionFlag = b; }
+  uint32_t getmSptiSEIDirectionFlag() { return m_sptiDirectionFlag; }
+#endif
 };
 
 

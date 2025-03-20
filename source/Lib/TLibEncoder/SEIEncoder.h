@@ -130,7 +130,10 @@ public:
   Void initDecodedPictureHashSEI(SEIDecodedPictureHash *sei, TComPic *pcPic, std::string &rHashString, const BitDepths &bitDepths);
   Void initTemporalLevel0IndexSEI(SEITemporalLevel0Index *sei, TComSlice *slice);
   Void initSEIGreenMetadataInfo(SEIGreenMetadataInfo *sei, UInt u);
-
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  void initSEISourcePictureTimingInfo(
+      SEISourcePictureTimingInfo *SEISourcePictureTimingInfo);
+#endif
 private:
   TEncCfg* m_pcCfg;
   TEncTop* m_pcEncTop;

@@ -2462,7 +2462,8 @@ The table below lists the SEI messages defined for Version 1 and Range-Extension
   200 & SEI manifest                             & Table \ref{tab:sei-sei-manifest} \\
   201 & SEI prefix indication				 & Table \ref{tab:sei-sei-prefix-indication} \\
   203 & Shutter interval information             & Table \ref{tab:sei-sii}\\
-  212 & Phase indication                         & Table \ref{tab:sei-phase-indication} \\
+  212 & Phase indication                         & Table \ref{tab:sei-phase-indication} \\  
+  216 & Source Picture Timing Information        & Table \ref{tab:sei-source-picture-timing-info} \\
   218 & Modality Information         & Table \ref{tab:sei-modality-info}\\
   220/221/222 & Digitally Signed Content SEI messages        & Table \ref{tab:sei-dsc}\\
 \end{SEIListTable}
@@ -3714,6 +3715,33 @@ If SEIDSCKeyIDEnabled is enabled, the value of the key ID.
 Specifies the prefix of input Object Mask Information file. Prefix is completed by ``_x.txt'' where x is the  POC number.
 The contents of the file are a list of the SEI message's syntax element names (in decoding order) immediately followed by a `:' and then the associated value.
 An example file can be found in cfg/sei_vui/object_mask_infos/intra/mask_info_0.txt
+\\
+\end{OptionTableNoShorthand}
+
+\begin{OptionTableNoShorthand}{Source picture timing information SEI message encoder parameters}{tab:sei-source-picture-timing-info}
+\Option{SEISourcePictureTimingInfo} &
+\Default{false} &
+Enables (true) or disables (false) the insertion of Source picture timing information SEI message.
+\\
+\Option{SEISPTISourceTimingEqualsOutputTimingFlag} &
+\Default{true} &
+Indicates the timing of source pictures is the same as the timing of corresponding decoded output pictures(true) or indicates the timing of source pictures might not be the same as the timing of corresponding decoded output pictures(false).
+\\
+\Option{SEISPTISourceType} &
+\Default{0} &
+Indicates the timing relationship between source pictures and corresponding decoded output pictures.
+\\
+\Option{SEISPTITimeScale} &
+\Default{27000000} &
+Specifies the number of time units that pass in one second.
+\\
+\Option{SEISPTINumUnitsInElementalInterval} &
+\Default{1080000} &
+Specifies the number of time units of a clock operating at the frequency spti_time_scale Hz that corresponds to the indicated elemental source picture interval of consecutive pictures in output order in the CLVS.
+\\
+\Option{SEISPTIDirectionFlag} &
+\Default{false} &
+Indicates the direction of the signalled source picture intervals. spti_direction_flag equal to 0 indicates that source picture intervals are expressed relative to previous output pictures. spti_direction_flag equal to 1 indicates that source picture intervals are expressed relative to future output pictures.
 \\
 \end{OptionTableNoShorthand}
 
