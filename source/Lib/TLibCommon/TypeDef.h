@@ -68,6 +68,8 @@
 #define JVET_AK0194_DSC_SEI   1                      // Digitally signed content signing and verification (requires OpenSSL v3)
 #endif
 
+#define JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI        1
+
 // ====================================================================================================================
 // Debugging
 // ====================================================================================================================

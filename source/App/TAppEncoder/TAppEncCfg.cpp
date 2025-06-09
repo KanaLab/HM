@@ -766,6 +766,20 @@ Bool TAppEncCfg::parseCfg( Int argc, TChar* argv[] )
 #if SHUTTER_INTERVAL_SEI_MESSAGE
   SMultiValueInput<UInt>   cfg_siiSEIInputNumUnitsInSI                (0, MAX_UINT, 0, 7);
 #endif
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  SMultiValueInput<uint32_t> cfg_priSEIResamplingWidthNumMinus1       (0, 65535, 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEIResamplingWidthDenomMinus1     (0, 65535, 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEIResamplingHeightNumMinus1      (0, std::numeric_limits<uint32_t>::max() - 1, 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEIResamplingHeightDenomMinus1    (0, std::numeric_limits<uint32_t>::max() - 1, 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEIRegionId                       (0, std::numeric_limits<uint32_t>::max(), 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEIRegionTopLeftInUnitsX          (0, std::numeric_limits<uint32_t>::max(), 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEIRegionTopLeftInUnitsY          (0, std::numeric_limits<uint32_t>::max(), 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEIRegionWidthInUnitsMinus1       (0, std::numeric_limits<uint32_t>::max() - 1, 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEIRegionHeightInUnitsMinus1      (0, std::numeric_limits<uint32_t>::max() - 1, 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEIResamplingRatioIdx             (0, std::numeric_limits<uint32_t>::max(), 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEITargetRegionTopLeftInUnitsX    (0, std::numeric_limits<uint32_t>::max(), 0, std::numeric_limits<uint32_t>::max());
+  SMultiValueInput<uint32_t> cfg_priSEITargetRegionTopLeftInUnitsY    (0, std::numeric_limits<uint32_t>::max(), 0, std::numeric_limits<uint32_t>::max());
+#endif
 
   Int warnUnknowParameter = 0;
   po::Options opts;
@@ -1370,6 +1384,32 @@ Bool TAppEncCfg::parseCfg( Int argc, TChar* argv[] )
   ("SEIDSCVerificationKeyURI", m_cfgDigitallySignedContentSEI.publicKeyUri, std::string("") , "(Public) verification key URI for Digitally Signed Content SEI messages")
   ("SEIDSCKeyIDEnabled", m_cfgDigitallySignedContentSEI.keyIdEnabled, false, "Enable using a key ID addition to URI of public key of Digitally Signed Content SEI messages")
   ("SEIDSCKeyID", m_cfgDigitallySignedContentSEI.keyId, 0 , "Public Key ID for Digitally Signed Content SEI messages (if enabled)")
+#endif
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  ("SEIPRIEnabled",                                   m_priSEIEnabled,                                   false, "Specifies whether packet regions info SEI is enabled")
+  ("SEIPRICancelFlag",                                m_priSEICancelFlag,                                false, "Specifies the persistence of any previous packed regions info SEI message in output order")
+  ("SEIPRIPersistenceFlag",                           m_priSEIPersistenceFlag,                            true, "Specifies the persistence of the packed regions info SEI message for the current layer")
+  ("SEIPRINumRegionsMinus1",                          m_priSEINumRegionsMinus1,                             0u, "Specifies the number of regions minus 1 for which information is signalled")
+  ("SEIPRIUseMaxDimensionsFlag",                      m_priSEIUseMaxDimensionsFlag,                      false, "Specifies that max pic dimensions are used in variable calculations")
+  ("SEIPRILog2UnitSize",                              m_priSEILog2UnitSize,                                 0u, "Specifies a unit size used in variable calculations for the region parameters")
+  ("SEIPRIRegionSizeLenMinus1",                       m_priSEIRegionSizeLenMinus1,                         12u, "Specifies the number of bits minus 1 used to signal region top left offsets and region dimensions")
+  ("SEIPRIRegionIdPresentFlag",                       m_priSEIRegionIdPresentFlag,                       false, "Specifies whether region IDs are signalled")
+  ("SEIPRITargetPicParamsPresentFlag",                m_priSEITargetPicParamsPresentFlag,                false, "Specifies whether pri_target_region_top_left_x[ i ], pri_target_region_top_left_y[ i ], pri_target_pic_width_minus1, and pri_target_pic_height_minus1 are signalled")
+  ("SEIPRITargetPicWidthMinus1",                      m_priSEITargetPicWidthMinus1,                         0u, "Target output picture width minus 1")
+  ("SEIPRITargetPicHeightMinus1",                     m_priSEITargetPicHeightMinus1,                        0u, "Target output picture height minus 1")
+  ("SEIPRINumResamplingRatiosMinus1",                 m_priSEINumResamplingRatiosMinus1,                    0u, "Specifies the number resampling ratios minus 1 that are signalled")
+  ("SEIPRIResamplingWidthNumMinus1",                  cfg_priSEIResamplingWidthNumMinus1, cfg_priSEIResamplingWidthNumMinus1, "Specifies a list of numerators minus 1 values for width resampling of the resampling ratio")
+  ("SEIPRIResamplingWidthDenomMinus1",                cfg_priSEIResamplingWidthDenomMinus1, cfg_priSEIResamplingWidthDenomMinus1, "Specifies a list of denominators minus 1 values for width resampling of the resampling ratio")
+  ("SEIPRIResamplingHeightNumMinus1",                 cfg_priSEIResamplingHeightNumMinus1, cfg_priSEIResamplingHeightNumMinus1, "Specifies a list of numerators minus 1 values for height resampling of the resampling ratio")
+  ("SEIPRIResamplingHeightDenomMinus1",               cfg_priSEIResamplingHeightDenomMinus1, cfg_priSEIResamplingHeightDenomMinus1, "Specifies a list of denominators minus 1 values for height resampling of the resampling ratio")
+  ("SEIPRIRegionId",                                  cfg_priSEIRegionId, cfg_priSEIRegionId,                   "Specifies a list of IDs for the regions")
+  ("SEIPRIRegionTopLeftInUnitsX",                     cfg_priSEIRegionTopLeftInUnitsX, cfg_priSEIRegionTopLeftInUnitsX, "Specifies a list of horizontal top left positions for the regions")
+  ("SEIPRIRegionTopLeftInUnitsY",                     cfg_priSEIRegionTopLeftInUnitsY, cfg_priSEIRegionTopLeftInUnitsY, "Specifies a list of vertical top left positions for the regions")
+  ("SEIPRIRegionWidthInUnitsMinus1",                  cfg_priSEIRegionWidthInUnitsMinus1, cfg_priSEIRegionWidthInUnitsMinus1, "Specifies a list of widths minus 1 in units for the regions")
+  ("SEIPRIRegionHeightInUnitsMinus1",                 cfg_priSEIRegionHeightInUnitsMinus1, cfg_priSEIRegionHeightInUnitsMinus1, "Specifies a list of heights minus 1 in units for the regions")
+  ("SEIPRIResamplingRatioIdx",                        cfg_priSEIResamplingRatioIdx, cfg_priSEIResamplingRatioIdx, "Specifies a list of resampling ration indices for the regions")
+  ("SEIPRITargetRegionTopLeftInUnitsX",               cfg_priSEITargetRegionTopLeftInUnitsX, cfg_priSEITargetRegionTopLeftInUnitsX, "Specifies a list of horizontal top left postions in units of priUnitSize luma samples for the regions in reconstructed target picture")
+  ("SEIPRITargetRegionTopLeftInUnitsY",               cfg_priSEITargetRegionTopLeftInUnitsY, cfg_priSEITargetRegionTopLeftInUnitsY, "Specifies a list of vertical top left postions in units of priUnitSize luma samples for the regions in reconstructed target picture")
 #endif
   ;
 
@@ -2238,6 +2278,83 @@ Bool TAppEncCfg::parseCfg( Int argc, TChar* argv[] )
     }
   }
 #endif
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  if (m_priSEIEnabled)
+  {
+    CHECK(m_priSEICancelFlag, "SEIPRICancelFlag must be 0 in this implementation");
+    CHECK(!m_priSEIPersistenceFlag, "SEIPRIPersistenceFlag must be 1 in this implementation");
+    CHECK(cfg_priSEIResamplingWidthNumMinus1.values.size() != (m_priSEINumResamplingRatiosMinus1 + 1), "Number of elements in SEIRPRIesamplingWidthNumMinus1 must be equal to SEIPRINumResamplingRatiosMinus1 + 1");
+    CHECK(cfg_priSEIResamplingWidthDenomMinus1.values.size() != (m_priSEINumResamplingRatiosMinus1 + 1), "Number of elements in SEIPRIResamplingWidthNumMinus1 must be equal to SEIPRIResamplingWidthDenomMinus1 + 1");
+    CHECK(cfg_priSEIResamplingHeightNumMinus1.values.size() != (m_priSEINumResamplingRatiosMinus1 + 1), "Number of elements in SEIPRIResamplingHeightNumMinus1 must be equal to SEIPRINumResamplingRatiosMinus1 + 1");
+    CHECK(cfg_priSEIResamplingHeightDenomMinus1.values.size() != (m_priSEINumResamplingRatiosMinus1 + 1), "Number of elements in SEIPRIResamplingHeightNumMinus1 must be equal to SEIPRIResamplingWidthDenomMinus1 + 1");
+    if (m_priSEINumResamplingRatiosMinus1 > 0)
+    {
+      m_priSEIResamplingWidthNumMinus1 = cfg_priSEIResamplingWidthNumMinus1.values;
+      m_priSEIResamplingWidthDenomMinus1 = cfg_priSEIResamplingWidthDenomMinus1.values;
+      m_priSEIResamplingHeightNumMinus1 = cfg_priSEIResamplingHeightNumMinus1.values;
+      m_priSEIResamplingHeightDenomMinus1 = cfg_priSEIResamplingHeightDenomMinus1.values;
+      m_priSEIFixedAspectRatioFlag.resize(m_priSEINumResamplingRatiosMinus1 + 1);
+      for (uint32_t i = 1; i <= m_priSEINumResamplingRatiosMinus1; i++)
+      {
+        m_priSEIFixedAspectRatioFlag[i] =
+          m_priSEIResamplingWidthNumMinus1[i] == m_priSEIResamplingHeightNumMinus1[i] &&
+          m_priSEIResamplingWidthDenomMinus1[i] == m_priSEIResamplingHeightDenomMinus1[i];
+      }
+      // First entry has fixed values
+      m_priSEIResamplingWidthNumMinus1[0] = 0;
+      m_priSEIResamplingWidthDenomMinus1[0] = 0;
+      m_priSEIFixedAspectRatioFlag[0] = true;
+      m_priSEIResamplingHeightNumMinus1[0] = 0;
+      m_priSEIResamplingHeightDenomMinus1[0] = 0;
+    }
+    else
+    {
+      m_priSEIResamplingWidthNumMinus1 = {0};
+      m_priSEIResamplingWidthDenomMinus1 = {0};
+      m_priSEIFixedAspectRatioFlag = {true};
+      m_priSEIResamplingHeightNumMinus1 = {0};
+      m_priSEIResamplingHeightDenomMinus1 = {0};
+    }
+
+    if (m_priSEIRegionIdPresentFlag)
+    {
+      CHECK(cfg_priSEIRegionId.values.size() != (m_priSEINumRegionsMinus1 + 1), "Number of elements in SEIPRIRegionId must be equal to SEIPRINumRegionsMinus1 + 1");
+      std::vector<uint32_t> tmpVec = cfg_priSEIRegionId.values;
+      std::sort(tmpVec.begin(), tmpVec.end());
+      auto it = std::unique(tmpVec.begin(), tmpVec.end());
+      CHECK(it != tmpVec.end(), "SEIRegionId values must be unique");
+    }
+    CHECK(cfg_priSEIRegionTopLeftInUnitsX.values.size() != (m_priSEINumRegionsMinus1 + 1), "Number of elements in SEIPRIRegionTopLeftInUnitsX must be equal to SEIPRINumRegionsMinus1 + 1");
+    CHECK(cfg_priSEIRegionTopLeftInUnitsY.values.size() != (m_priSEINumRegionsMinus1 + 1), "Number of elements in SEIPRIRegionTopLeftInUnitsY must be equal to SEIPRINumRegionsMinus1 + 1");
+    CHECK(cfg_priSEIRegionWidthInUnitsMinus1.values.size() != (m_priSEINumRegionsMinus1 + 1), "Number of elements in SEIPRIRegionWidthInUnitsMinus1 must be equal to SEIPRINumRegionsMinus1 + 1");
+    CHECK(cfg_priSEIRegionHeightInUnitsMinus1.values.size() != (m_priSEINumRegionsMinus1 + 1), "Number of elements in SEIPRIRegionHeightInUnitsMinus1 must be equal to SEIPRINumRegionsMinus1 + 1");
+    if (m_priSEINumResamplingRatiosMinus1 > 0)
+    {
+      CHECK(cfg_priSEIResamplingRatioIdx.values.size() != (m_priSEINumRegionsMinus1 + 1), "Number of elements in SEIPRIResamplingRatioIdx must be equal to SEIPRINumRegionsMinus1 + 1");
+    }
+    if (m_priSEITargetPicParamsPresentFlag)
+    {
+      CHECK(cfg_priSEITargetRegionTopLeftInUnitsX.values.size() != (m_priSEINumRegionsMinus1 + 1), "Number of elements in SEIPRITargetRegionTopLeftInUnitsX must be equal to SEIPRINumRegionsMinus1 + 1");
+      CHECK(cfg_priSEITargetRegionTopLeftInUnitsY.values.size() != (m_priSEINumRegionsMinus1 + 1), "Number of elements in SEIPRITargetRegionTopLeftInUnitsY must be equal to SEIPRINumRegionsMinus1 + 1");
+    }
+    m_priSEIRegionId = cfg_priSEIRegionId.values;
+    m_priSEIRegionTopLeftInUnitsX = cfg_priSEIRegionTopLeftInUnitsX.values;
+    m_priSEIRegionTopLeftInUnitsY = cfg_priSEIRegionTopLeftInUnitsY.values;
+    m_priSEIRegionWidthInUnitsMinus1 = cfg_priSEIRegionWidthInUnitsMinus1.values;
+    m_priSEIRegionHeightInUnitsMinus1 = cfg_priSEIRegionHeightInUnitsMinus1.values;
+    if (m_priSEINumResamplingRatiosMinus1 > 0)
+    {
+      m_priSEIResamplingRatioIdx = cfg_priSEIResamplingRatioIdx.values;
+    }
+    else
+    {
+      m_priSEIResamplingRatioIdx = {0};
+    }
+    m_priSEITargetRegionTopLeftInUnitsX = cfg_priSEITargetRegionTopLeftInUnitsX.values;
+    m_priSEITargetRegionTopLeftInUnitsY = cfg_priSEITargetRegionTopLeftInUnitsY.values;
+  }
+#endif
+
   // check validity of input parameters
   xCheckParameter();
 

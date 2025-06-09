@@ -1653,4 +1653,79 @@ void SEIEncoder::initSEIDigitallySignedContentVerification(SEIDigitallySignedCon
 }
 #endif
 
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+void SEIEncoder::initSEIPackedRegionsInfo(SEIPackedRegionsInfo* sei)
+{
+  sei->m_cancelFlag = m_pcCfg->getPriSEICancelFlag();
+  sei->m_persistenceFlag = m_pcCfg->getPriSEIPersistenceFlag();
+  sei->m_numRegionsMinus1 = m_pcCfg->getPriSEINumRegionsMinus1();
+  sei->m_layerId = 0;  // Always 0 in HM encoder
+  sei->m_multilayerFlag = m_pcCfg->getPriSEIMultilayerFlag();
+  sei->m_useMaxDimensionsFlag = m_pcCfg->getPriSEIUseMaxDimensionsFlag();
+  sei->m_log2UnitSize = m_pcCfg->getPriSEILog2UnitSize();
+  sei->m_regionSizeLenMinus1 = m_pcCfg->getPriSEIRegionSizeLenMinus1();
+  sei->m_regionIdPresentFlag = m_pcCfg->getPriSEIRegionIdPresentFlag();
+  sei->m_targetPicParamsPresentFlag = m_pcCfg->getPriSEITargetPicParamsPresentFlag();
+  sei->m_targetPicWidthMinus1 = m_pcCfg->getPriSEITargetPicWidthMinus1();
+  sei->m_targetPicHeightMinus1 = m_pcCfg->getPriSEITargetPicHeightMinus1();
+  sei->m_numResamplingRatiosMinus1 = m_pcCfg->getPriSEINumResamplingRatiosMinus1();
+
+  sei->m_resamplingWidthNumMinus1.resize(sei->m_numResamplingRatiosMinus1 + 1);
+  sei->m_resamplingWidthDenomMinus1.resize(sei->m_numResamplingRatiosMinus1 + 1);
+  sei->m_fixedAspectRatioFlag.resize(sei->m_numResamplingRatiosMinus1 + 1);
+  sei->m_resamplingHeightNumMinus1.resize(sei->m_numResamplingRatiosMinus1 + 1);
+  sei->m_resamplingHeightDenomMinus1.resize(sei->m_numResamplingRatiosMinus1 + 1);
+  for (uint32_t i = 0; i <= sei->m_numResamplingRatiosMinus1; i++)
+  {
+    sei->m_resamplingWidthNumMinus1[i] = m_pcCfg->getPriSEIResamplingWidthNumMinus1(i);
+    sei->m_resamplingWidthDenomMinus1[i] = m_pcCfg->getPriSEIResamplingWidthDenomMinus1(i);
+    sei->m_fixedAspectRatioFlag[i] = m_pcCfg->getPriSEIFixedAspectRatioFlag(i);
+    sei->m_resamplingHeightNumMinus1[i] = m_pcCfg->getPriSEIResamplingHeightNumMinus1(i);
+    sei->m_resamplingHeightDenomMinus1[i] = m_pcCfg->getPriSEIResamplingHeightDenomMinus1(i);
+  }
+
+  sei->m_regionId.resize(sei->m_numRegionsMinus1 + 1);
+  sei->m_regionLayerId.resize(sei->m_numRegionsMinus1 + 1);
+  sei->m_regionIsALayerFlag.resize(sei->m_numRegionsMinus1 + 1);
+  sei->m_regionTopLeftInUnitsX.resize(sei->m_numRegionsMinus1 + 1);
+  sei->m_regionTopLeftInUnitsY.resize(sei->m_numRegionsMinus1 + 1);
+  sei->m_regionWidthInUnitsMinus1.resize(sei->m_numRegionsMinus1 + 1);
+  sei->m_regionHeightInUnitsMinus1.resize(sei->m_numRegionsMinus1 + 1);
+  sei->m_resamplingRatioIdx.resize(sei->m_numRegionsMinus1 + 1);
+  sei->m_targetRegionTopLeftInUnitsX.resize(sei->m_numRegionsMinus1 + 1);
+  sei->m_targetRegionTopLeftInUnitsY.resize(sei->m_numRegionsMinus1 + 1);
+  for (uint32_t i = 0; i <= sei->m_numRegionsMinus1; i++)
+  {
+    sei->m_regionId[i] = m_pcCfg->getPriSEIRegionId(i);
+    if (sei->m_multilayerFlag)
+    {
+      sei->m_regionLayerId[i] = m_pcCfg->getPriSEIRegionLayerId(i);
+      sei->m_regionIsALayerFlag[i] = m_pcCfg->getPriSEIRegionIsALayerFlag(i);
+    }
+    else
+    {
+      sei->m_regionLayerId[i] = 0;
+      sei->m_regionIsALayerFlag[i] = 0;
+    }
+    if (!sei->m_regionIsALayerFlag[i])
+    {
+      sei->m_regionTopLeftInUnitsX[i] = m_pcCfg->getPriSEIRegionTopLeftInUnitsX(i);
+      sei->m_regionTopLeftInUnitsY[i] = m_pcCfg->getPriSEIRegionTopLeftInUnitsY(i);
+      sei->m_regionWidthInUnitsMinus1[i] = m_pcCfg->getPriSEIRegionWidthInUnitsMinus1(i);
+      sei->m_regionHeightInUnitsMinus1[i] = m_pcCfg->getPriSEIRegionHeightInUnitsMinus1(i);
+    }
+    else
+    {
+      sei->m_regionTopLeftInUnitsX[i] = 0;
+      sei->m_regionTopLeftInUnitsY[i] = 0;
+      sei->m_regionWidthInUnitsMinus1[i] = 0;
+      sei->m_regionHeightInUnitsMinus1[i] = 0;
+    }
+    sei->m_resamplingRatioIdx[i] = m_pcCfg->getPriSEIResamplingRatioIdx(i);
+    sei->m_targetRegionTopLeftInUnitsX[i] = m_pcCfg->getPriSEITargetRegionTopLeftInUnitsX(i);
+    sei->m_targetRegionTopLeftInUnitsY[i] = m_pcCfg->getPriSEITargetRegionTopLeftInUnitsY(i);
+  }
+}
+#endif
+
 //! \}

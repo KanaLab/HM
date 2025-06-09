@@ -119,6 +119,35 @@ Void TAppEncTop::xInitLibCfg()
   m_cTEncTop.setDigitallySignedContentSEICfg                      (m_cfgDigitallySignedContentSEI);
 #endif
 
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  m_cTEncTop.setPriSEIEnabled(m_priSEIEnabled);
+  m_cTEncTop.setPriSEICancelFlag(m_priSEICancelFlag);
+  m_cTEncTop.setPriSEIPersistenceFlag(m_priSEIPersistenceFlag);
+  m_cTEncTop.setPriSEINumRegionsMinus1(m_priSEINumRegionsMinus1);
+  m_cTEncTop.setPriSEIMultilayerFlag(false); // Only single layer in HM encoder
+  m_cTEncTop.setPriSEIUseMaxDimensionsFlag(m_priSEIUseMaxDimensionsFlag);
+  m_cTEncTop.setPriSEILog2UnitSize(m_priSEILog2UnitSize);
+  m_cTEncTop.setPriSEIRegionSizeLenMinus1(m_priSEIRegionSizeLenMinus1);
+  m_cTEncTop.setPriSEIRegionIdPresentFlag(m_priSEIRegionIdPresentFlag);
+  m_cTEncTop.setPriSEITargetPicParamsPresentFlag(m_priSEITargetPicParamsPresentFlag);
+  m_cTEncTop.setPriSEITargetPicWidthMinus1(m_priSEITargetPicWidthMinus1);
+  m_cTEncTop.setPriSEITargetPicHeightMinus1(m_priSEITargetPicHeightMinus1);
+  m_cTEncTop.setPriSEINumResamplingRatiosMinus1(m_priSEINumResamplingRatiosMinus1);
+  m_cTEncTop.setPriSEIResamplingWidthNumMinus1(m_priSEIResamplingWidthNumMinus1);
+  m_cTEncTop.setPriSEIResamplingWidthDenomMinus1(m_priSEIResamplingWidthDenomMinus1);
+  m_cTEncTop.setPriSEIFixedAspectRatioFlag(m_priSEIFixedAspectRatioFlag);
+  m_cTEncTop.setPriSEIResamplingHeightNumMinus1(m_priSEIResamplingHeightNumMinus1);
+  m_cTEncTop.setPriSEIResamplingHeightDenomMinus1(m_priSEIResamplingHeightDenomMinus1);
+  m_cTEncTop.setPriSEIRegionId(m_priSEIRegionId);
+  m_cTEncTop.setPriSEIRegionTopLeftInUnitsX(m_priSEIRegionTopLeftInUnitsX);
+  m_cTEncTop.setPriSEIRegionTopLeftInUnitsY(m_priSEIRegionTopLeftInUnitsY);
+  m_cTEncTop.setPriSEIRegionWidthInUnitsMinus1(m_priSEIRegionWidthInUnitsMinus1);
+  m_cTEncTop.setPriSEIRegionHeightInUnitsMinus1(m_priSEIRegionHeightInUnitsMinus1);
+  m_cTEncTop.setPriSEIResamplingRatioIdx(m_priSEIResamplingRatioIdx);
+  m_cTEncTop.setPriSEITargetRegionTopLeftInUnitsX(m_priSEITargetRegionTopLeftInUnitsX);
+  m_cTEncTop.setPriSEITargetRegionTopLeftInUnitsY(m_priSEITargetRegionTopLeftInUnitsY);
+#endif
+
   m_cTEncTop.setCabacZeroWordPaddingEnabled                       ( m_cabacZeroWordPaddingEnabled );
 
   m_cTEncTop.setFrameRate                                         ( m_iFrameRate );

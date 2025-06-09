@@ -719,6 +719,14 @@ Void TEncGOP::xCreateIRAPLeadingSEIMessages (SEIMessages& seiMessages, const TCo
     seiMessages.push_back(sei);
   }
 #endif
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  if (m_pcCfg->getPriSEIEnabled())
+  {
+    SEIPackedRegionsInfo *sei = new SEIPackedRegionsInfo;
+    m_seiEncoder.initSEIPackedRegionsInfo(sei);
+    seiMessages.push_back(sei);
+  }
+#endif
 }
 
 Void TEncGOP::xCreatePerPictureSEIMessages (Int picInGOP, SEIMessages& seiMessages, SEIMessages& nestedSeiMessages, TComSlice *slice)
