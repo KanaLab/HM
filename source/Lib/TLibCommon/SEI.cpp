@@ -99,7 +99,7 @@ const std::vector<SEI::PayloadType> SEI::prefix_sei_messages({
   SEI::DIGITALLY_SIGNED_CONTENT_SELECTION,
 #endif
 #if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
-   , SEI::ENCODER_OPTIMIZATION_INFO
+  SEI::ENCODER_OPTIMIZATION_INFO
 #endif
 
 });
@@ -395,16 +395,12 @@ const TChar *SEI::getSEIMessageString(SEI::PayloadType payloadType)
 #if JVET_AE0101_PHASE_INDICATION_SEI_MESSAGE
     case SEI::PHASE_INDICATION:                     return "Phase Indication";
 #endif
-<<<<<<< source/Lib/TLibCommon/SEI.cpp
 #if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
     case SEI::ENCODER_OPTIMIZATION_INFO:            return "Encoder optimization information";
 #endif
-
-=======
 #if JVET_AK0107_MODALITY_INFORMATION
     case SEI::MODALITY_INFORMATION:                 return "Modality information";
 #endif
->>>>>>> source/Lib/TLibCommon/SEI.cpp
     default:                                        return "Unknown";
   }
 }

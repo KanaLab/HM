@@ -1272,7 +1272,7 @@ void SEIWriter::xWriteSEIEncoderOptimizationInfo(const SEIEncoderOptimizationInf
     WRITE_CODE(0, 2, "eoi_reserved_zero_2bits");
     WRITE_CODE(sei.m_type, 16, "eoi_type");
 
-<<<<<<< source/Lib/TLibEncoder/SEIwrite.cpp
+
     if ((sei.m_type & EOI_OptimizationType::OBJECT_BASED_OPTIMIZATION) != 0)
     {
       WRITE_CODE(sei.m_objectBasedIdc, 16, "eoi_object_based_idc");
@@ -1315,7 +1315,7 @@ void SEIWriter::xWriteSEIEncoderOptimizationInfo(const SEIEncoderOptimizationInf
   }
 }
 #endif
-=======
+
 #if JVET_AK0107_MODALITY_INFORMATION
 Void SEIWriter::xWriteSEIModalityInfo(const SEIModalityInfo& sei)
 {
@@ -1337,7 +1337,6 @@ Void SEIWriter::xWriteSEIModalityInfo(const SEIModalityInfo& sei)
 }
 #endif 
 
->>>>>>> source/Lib/TLibEncoder/SEIwrite.cpp
 Void SEIWriter::xWriteSEIEquirectangularProjection(const SEIEquirectangularProjection &sei
 #if JCTVC_AD0021_SEI_PREFIX_INDICATION
   , Int SEIPrefixIndicationIdx
