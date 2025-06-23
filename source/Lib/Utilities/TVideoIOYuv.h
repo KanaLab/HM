@@ -84,7 +84,14 @@ public:
   Bool  isEof ();                                           ///< check for end-of-file
   Bool  isFail();                                           ///< check for failure
 
-
+  void setBitdepth(const int (&internalBitDepth)[MAX_NUM_CHANNEL_TYPE])
+  {
+    for(UInt compIdx = 0; compIdx < MAX_NUM_CHANNEL_TYPE; ++compIdx)
+    {
+      auto const ch = ChannelType(compIdx);
+      m_bitdepthShift[ch] = internalBitDepth[ch] - m_MSBExtendedBitDepth[ch];
+    }
+  }
 };
 
 #endif // __TVIDEOIOYUV__
