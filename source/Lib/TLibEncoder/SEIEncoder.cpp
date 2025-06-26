@@ -1654,39 +1654,28 @@ void SEIEncoder::initSEIDigitallySignedContentVerification(SEIDigitallySignedCon
 #endif
 
 #if JVET_AK2006_SPTI_SEI_MESSAGE
-void SEIEncoder::initSEISourcePictureTimingInfo(
-    SEISourcePictureTimingInfo *SEISourcePictureTimingInfo) {
+void SEIEncoder::initSEISourcePictureTimingInfo(SEISourcePictureTimingInfo *SEISourcePictureTimingInfo) 
+{
 
   assert(m_isInitialized);
   assert(SEISourcePictureTimingInfo != NULL);
 
   SEISourcePictureTimingInfo->m_sptiSEIEnabled = m_pcCfg->getSptiSEIEnabled();
-  SEISourcePictureTimingInfo->m_sptiSourceTimingEqualsOutputTimingFlag =
-      m_pcCfg->getmSptiSEISourceTimingEqualsOutputTimingFlag();
-  SEISourcePictureTimingInfo->m_sptiSourceType =
-      m_pcCfg->getmSptiSEISourceType();
+  SEISourcePictureTimingInfo->m_sptiSourceTimingEqualsOutputTimingFlag = m_pcCfg->getmSptiSEISourceTimingEqualsOutputTimingFlag();
+  SEISourcePictureTimingInfo->m_sptiSourceType = m_pcCfg->getmSptiSEISourceType();
   SEISourcePictureTimingInfo->m_sptiTimeScale = m_pcCfg->getmSptiSEITimeScale();
-  SEISourcePictureTimingInfo->m_sptiNumUnitsInElementalInterval =
-      m_pcCfg->getmSptiSEINumUnitsInElementalInterval();
-  SEISourcePictureTimingInfo->m_sptiDirectionFlag =
-      m_pcCfg->getmSptiSEIDirectionFlag();
-  SEISourcePictureTimingInfo->m_sptiMaxSublayersMinus1 =
-      m_pcCfg->getMaxTempLayer() - 1;
+  SEISourcePictureTimingInfo->m_sptiNumUnitsInElementalInterval = m_pcCfg->getmSptiSEINumUnitsInElementalInterval();
+  SEISourcePictureTimingInfo->m_sptiDirectionFlag = m_pcCfg->getmSptiSEIDirectionFlag();
+  SEISourcePictureTimingInfo->m_sptiMaxSublayersMinus1 = m_pcCfg->getMaxTempLayer() - 1;
   SEISourcePictureTimingInfo->m_sptiCancelFlag = 0;
   SEISourcePictureTimingInfo->m_sptiPersistenceFlag = 1;
-  SEISourcePictureTimingInfo->m_sptiSourceTypePresentFlag =
-      (SEISourcePictureTimingInfo->m_sptiSourceType == 0 ? 0 : 1);
+  SEISourcePictureTimingInfo->m_sptiSourceTypePresentFlag = (SEISourcePictureTimingInfo->m_sptiSourceType == 0 ? 0 : 1);
 
-  int sptiMinTemporalSublayer =
-      (SEISourcePictureTimingInfo->m_sptiPersistenceFlag
-           ? 0
-           : SEISourcePictureTimingInfo->m_sptiMaxSublayersMinus1);
+  int sptiMinTemporalSublayer = (SEISourcePictureTimingInfo->m_sptiPersistenceFlag ? 0 : SEISourcePictureTimingInfo->m_sptiMaxSublayersMinus1);
 
-  for (int i = sptiMinTemporalSublayer;
-       i <= SEISourcePictureTimingInfo->m_sptiMaxSublayersMinus1; i++) {
-    SEISourcePictureTimingInfo->m_sptiSublayerIntervalScaleFactor[i] =
-        1 << (SEISourcePictureTimingInfo->m_sptiMaxSublayersMinus1 - i);
-
+  for (int i = sptiMinTemporalSublayer; i <= SEISourcePictureTimingInfo->m_sptiMaxSublayersMinus1; i++) 
+  {
+    SEISourcePictureTimingInfo->m_sptiSublayerIntervalScaleFactor[i] = 1 << (SEISourcePictureTimingInfo->m_sptiMaxSublayersMinus1 - i);
     SEISourcePictureTimingInfo->m_sptiSublayerSynthesizedPictureFlag[i] = false;
   }
 #endif

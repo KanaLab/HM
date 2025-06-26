@@ -1518,22 +1518,14 @@ public:
 #if JVET_AK2006_SPTI_SEI_MESSAGE
   void setSptiSEIEnabled(bool b) { m_sptiSEIEnabled = b; }
   bool getSptiSEIEnabled() { return m_sptiSEIEnabled; }
-  void setmSptiSEISourceTimingEqualsOutputTimingFlag(bool b) {
-    m_sptiSourceTimingEqualsOutputTimingFlag = b;
-  }
-  bool getmSptiSEISourceTimingEqualsOutputTimingFlag() {
-    return m_sptiSourceTimingEqualsOutputTimingFlag;
-  }
+  void setmSptiSEISourceTimingEqualsOutputTimingFlag(bool b) { m_sptiSourceTimingEqualsOutputTimingFlag = b; }
+  bool getmSptiSEISourceTimingEqualsOutputTimingFlag() { return m_sptiSourceTimingEqualsOutputTimingFlag; }
   void setmSptiSEISourceType(uint32_t b) { m_sptiSourceType = b; }
   uint32_t getmSptiSEISourceType() { return m_sptiSourceType; }
   void setmSptiSEITimeScale(uint32_t b) { m_sptiTimeScale = b; }
   uint32_t getmSptiSEITimeScale() { return m_sptiTimeScale; }
-  void setmSptiSEINumUnitsInElementalInterval(uint32_t b) {
-    m_sptiNumUnitsInElementalInterval = b;
-  }
-  uint32_t getmSptiSEINumUnitsInElementalInterval() {
-    return m_sptiNumUnitsInElementalInterval;
-  }
+  void setmSptiSEINumUnitsInElementalInterval(uint32_t b) { m_sptiNumUnitsInElementalInterval = b; }
+  uint32_t getmSptiSEINumUnitsInElementalInterval() { return m_sptiNumUnitsInElementalInterval; }
   void setmSptiSEIDirectionFlag(bool b) { m_sptiDirectionFlag = b; }
   uint32_t getmSptiSEIDirectionFlag() { return m_sptiDirectionFlag; }
 #endif

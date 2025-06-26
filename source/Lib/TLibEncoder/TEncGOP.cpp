@@ -720,9 +720,9 @@ Void TEncGOP::xCreateIRAPLeadingSEIMessages (SEIMessages& seiMessages, const TCo
   }
 #endif
 #if JVET_AK2006_SPTI_SEI_MESSAGE
-   if (m_pcCfg->getSptiSEIEnabled()) {
-     SEISourcePictureTimingInfo *seiSourcePictureTimingInfo =
-         new SEISourcePictureTimingInfo(sps->getMaxTLayers() - 1);
+   if (m_pcCfg->getSptiSEIEnabled()) 
+   {
+     SEISourcePictureTimingInfo *seiSourcePictureTimingInfo = new SEISourcePictureTimingInfo(sps->getMaxTLayers() - 1);
      m_seiEncoder.initSEISourcePictureTimingInfo(seiSourcePictureTimingInfo);
      seiMessages.push_back(seiSourcePictureTimingInfo);
    }

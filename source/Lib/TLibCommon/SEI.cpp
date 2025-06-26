@@ -321,11 +321,10 @@ uint8_t SEIPrefixIndication::getNumsOfSeiPrefixIndications(const SEI* sei)
 #endif
 
 #if JVET_AK2006_SPTI_SEI_MESSAGE
-SEISourcePictureTimingInfo::SEISourcePictureTimingInfo(
-    const SEISourcePictureTimingInfo &sei) {
+SEISourcePictureTimingInfo::SEISourcePictureTimingInfo(const SEISourcePictureTimingInfo &sei) 
+{
   m_sptiSEIEnabled = sei.m_sptiSEIEnabled;
-  m_sptiSourceTimingEqualsOutputTimingFlag =
-      sei.m_sptiSourceTimingEqualsOutputTimingFlag;
+  m_sptiSourceTimingEqualsOutputTimingFlag = sei.m_sptiSourceTimingEqualsOutputTimingFlag;
   m_sptiSourceType = sei.m_sptiSourceType;
   m_sptiTimeScale = sei.m_sptiTimeScale;
   m_sptiNumUnitsInElementalInterval = sei.m_sptiNumUnitsInElementalInterval;
