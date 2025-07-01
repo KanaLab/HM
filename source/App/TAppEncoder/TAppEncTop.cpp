@@ -471,6 +471,10 @@ Void TAppEncTop::xInitLibCfg()
   m_cTEncTop.setFilmGrainCharactersticsSEISepColourDescPresent    (m_fgcSEISepColourDescPresentFlag);
   m_cTEncTop.setFilmGrainCharactersticsSEIBlendingModeID          ((UChar)m_fgcSEIBlendingModeID);
   m_cTEncTop.setFilmGrainCharactersticsSEILog2ScaleFactor         ((UChar)m_fgcSEILog2ScaleFactor);
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+  m_cTEncTop.setFilmGrainCharactersticsSEIPicWidthInLumaSamples   (m_fgcSEIPicWidthInLumaSamples);
+  m_cTEncTop.setFilmGrainCharactersticsSEIPicHeightInLumaSamples  (m_fgcSEIPicHeightInLumaSamples);
+#endif
 #if JVET_X0048_X0103_FILM_GRAIN
   m_cTEncTop.setFilmGrainAnalysisEnabled                          (m_fgcSEIAnalysisEnabled);
   m_cTEncTop.setFilmGrainExternalMask                             (m_fgcSEIExternalMask);

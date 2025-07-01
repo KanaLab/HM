@@ -384,6 +384,11 @@ public:
 
   CompModel m_compModel[MAX_NUM_COMPONENT];
   Bool      m_filmGrainCharacteristicsPersistenceFlag;
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+  Bool      m_fgSpatialResolutionPresentFlag;
+  UInt      m_fgPicWidthInLumaSamples;
+  UInt      m_fgPicHeightInLumaSamples;
+#endif
 };
 
 

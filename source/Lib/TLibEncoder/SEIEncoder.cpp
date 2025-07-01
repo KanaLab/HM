@@ -626,6 +626,14 @@ Void SEIEncoder::initSEIFilmGrainCharacteristics(SEIFilmGrainCharacteristics *se
   seiFilmGrain->m_separateColourDescriptionPresentFlag    = m_pcCfg->getFilmGrainCharactersticsSEISepColourDescPresent();
   seiFilmGrain->m_blendingModeId                          = m_pcCfg->getFilmGrainCharactersticsSEIBlendingModeID();
   seiFilmGrain->m_log2ScaleFactor                         = m_pcCfg->getFilmGrainCharactersticsSEILog2ScaleFactor();
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+  seiFilmGrain->m_fgPicWidthInLumaSamples                 = m_pcCfg->getFilmGrainCharactersticsSEIPicWidthInLumaSamples();
+  seiFilmGrain->m_fgPicHeightInLumaSamples                = m_pcCfg->getFilmGrainCharactersticsSEIPicHeightInLumaSamples();
+  if (seiFilmGrain->m_fgPicWidthInLumaSamples > 0 || seiFilmGrain->m_fgPicHeightInLumaSamples > 0)
+  {
+    seiFilmGrain->m_fgSpatialResolutionPresentFlag = 1;
+  }
+#endif
   for (int i = 0; i < MAX_NUM_COMPONENT; i++)
   {
     seiFilmGrain->m_compModel[i].bPresentFlag = m_pcCfg->getFGCSEICompModelPresent(i);

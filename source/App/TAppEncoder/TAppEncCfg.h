@@ -520,6 +520,10 @@ protected:
   Bool      m_fgcSEISepColourDescPresentFlag;
   UInt      m_fgcSEIBlendingModeID;
   UInt      m_fgcSEILog2ScaleFactor;
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+  UInt      m_fgcSEIPicWidthInLumaSamples;
+  UInt      m_fgcSEIPicHeightInLumaSamples;
+#endif
   Bool      m_fgcSEICompModelPresent[MAX_NUM_COMPONENT];
 #if JVET_X0048_X0103_FILM_GRAIN
   Bool      m_fgcSEIAnalysisEnabled;

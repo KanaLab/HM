@@ -497,6 +497,10 @@ protected:
   UChar     m_fgcSEIBlendingModeID;
   UChar     m_fgcSEILog2ScaleFactor;
   Bool      m_fgcSEICompModelPresent[MAX_NUM_COMPONENT];
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+  UInt      m_fgcSEIPicWidthInLumaSamples;
+  UInt      m_fgcSEIPicHeightInLumaSamples;
+#endif
 #if JVET_X0048_X0103_FILM_GRAIN
   Bool      m_fgcSEIAnalysisEnabled;
   std::string m_fgcSEIExternalMask;
@@ -1158,6 +1162,12 @@ public:
   UChar getFilmGrainCharactersticsSEILog2ScaleFactor()               { return m_fgcSEILog2ScaleFactor; }
   Void  setFGCSEICompModelPresent(Bool b, Int index)                 { m_fgcSEICompModelPresent[index] = b; }
   Bool  getFGCSEICompModelPresent(Int index)                         { return m_fgcSEICompModelPresent[index]; }
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+  Void  setFilmGrainCharactersticsSEIPicWidthInLumaSamples(UInt v )  { m_fgcSEIPicWidthInLumaSamples = v; }
+  UInt  getFilmGrainCharactersticsSEIPicWidthInLumaSamples()         { return m_fgcSEIPicWidthInLumaSamples; }
+  Void  setFilmGrainCharactersticsSEIPicHeightInLumaSamples(UInt v)  { m_fgcSEIPicHeightInLumaSamples = v; }
+  UInt  getFilmGrainCharactersticsSEIPicHeightInLumaSamples()        { return m_fgcSEIPicHeightInLumaSamples; }
+#endif
 #if JVET_X0048_X0103_FILM_GRAIN
   bool*   getFGCSEICompModelPresent                 ()               { return m_fgcSEICompModelPresent; }
   void    setFilmGrainAnalysisEnabled               (bool b)         { m_fgcSEIAnalysisEnabled = b; }

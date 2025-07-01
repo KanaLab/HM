@@ -885,6 +885,15 @@ Void SEIReader::xParseSEIFilmGrainCharacteristics(SEIFilmGrainCharacteristics& s
       }
     } // for c
     sei_read_flag( pDecodedMessageOutputStream, code, "film_grain_characteristics_persistence_flag" ); sei.m_filmGrainCharacteristicsPersistenceFlag = code!=0;
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+    sei_read_flag( pDecodedMessageOutputStream, code, "film_grain_spatial_resolution_present_flag" ); sei.m_fgSpatialResolutionPresentFlag = code!=0;
+    if (sei.m_fgSpatialResolutionPresentFlag)
+    {
+      sei_read_uvlc(pDecodedMessageOutputStream, code, "fg_pic_width_in_luma_samples"); sei.m_fgPicWidthInLumaSamples = code;
+      sei_read_uvlc(pDecodedMessageOutputStream, code, "fg_pic_height_in_luma_samples"); sei.m_fgPicHeightInLumaSamples = code;
+
+    }
+#endif
   } // cancel flag
 }
 

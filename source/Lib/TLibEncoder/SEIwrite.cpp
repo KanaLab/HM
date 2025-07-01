@@ -593,6 +593,15 @@ Void SEIWriter::xWriteSEIFilmGrainCharacteristics(const SEIFilmGrainCharacterist
       }
     } // for c
     WRITE_FLAG( sei.m_filmGrainCharacteristicsPersistenceFlag, "film_grain_characteristics_persistence_flag" );
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+    WRITE_FLAG(sei.m_fgSpatialResolutionPresentFlag, "film_grain_spatial_resolution_present_flag");
+    if (sei.m_fgSpatialResolutionPresentFlag)
+    {
+      WRITE_UVLC(sei.m_fgPicWidthInLumaSamples, "fg_pic_width_in_luma_samples");
+      WRITE_UVLC(sei.m_fgPicHeightInLumaSamples, "fg_pic_height_in_luma_samples");
+      m_SeiExtensionBitsPresentFlag = true;
+    }
+#endif
   } // cancel flag
 }
 
@@ -1752,7 +1761,11 @@ Void SEIWriter::xWriteSEIPrefixIndicationByteAlign() {
 
 Void SEIWriter::xWriteByteAlign()
 {
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+  if (m_pcBitIf->getNumberOfWrittenBits() % 8 != 0 || m_SeiExtensionBitsPresentFlag)
+#else
   if (m_pcBitIf->getNumberOfWrittenBits() % 8 != 0)
+#endif
   {
     WRITE_FLAG(1, "payload_bit_equal_to_one");
     while (m_pcBitIf->getNumberOfWrittenBits() % 8 != 0)
