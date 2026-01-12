@@ -1,5 +1,5 @@
 # minimum required cmake version
-cmake_minimum_required( VERSION 3.5 FATAL_ERROR )
+cmake_minimum_required( VERSION 3.10 FATAL_ERROR )
 
 # project name
 if( EXTENSION_360_VIDEO )
@@ -38,8 +38,8 @@ if( CMAKE_COMPILER_IS_GNUCC )
   set( BUILD_STATIC OFF CACHE BOOL "Build static executables" )
 endif()
 
-# set c++11
-set( CMAKE_CXX_STANDARD 11 )
+# set c++17
+set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 # compile everything position independent (even static libraries)
