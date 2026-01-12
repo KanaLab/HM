@@ -39,7 +39,7 @@ variables:
 .build_template_linux_highbit:
    extends: .build_template_linux
    script:
-      - cmake -G "Ninja" -D "CMAKE_BUILD_TYPE:STRING=Release" -D "ENABLE_HIGH_BITDEPTH=true" -S . -B build/release
+      - cmake -G "Ninja" -D "CMAKE_BUILD_TYPE:STRING=Release" -D "HIGH_BITDEPTH=true" -S . -B build/release
       - cmake --build build/release --parallel $(nproc)
 
 .build_template_linux_trace_enable:
