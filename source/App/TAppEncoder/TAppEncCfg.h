@@ -511,6 +511,28 @@ protected:
   int       m_piVerPhaseNumFullResolution;
   int       m_piVerPhaseDenMinus1FullResolution;
 #endif
+
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  bool  m_eoiSEIEnabled;
+  bool  m_eoiSEICancelFlag;
+  bool  m_eoiSEIPersistenceFlag;
+  uint32_t m_eoiSEIForHumanViewingIdc;
+  uint32_t m_eoiSEIForMachineAnalysisIdc;
+  uint32_t m_eoiSEIType;
+  uint32_t m_eoiSEIObjectBasedIdc;
+  uint32_t m_eoiSEIQuantThresholdDelta;
+  bool     m_eoiSEIPicQuantObjectFlag;
+  bool m_eoiSEITemporalResamplingTypeFlag;
+  uint32_t m_eoiSEINumIntPics;
+  bool     m_eoiSEISrcPicFlag;;
+  bool     m_eoiSEIOrigPicDimensionsFlag;
+  uint32_t m_eoiSEIOrigPicWidth;
+  uint32_t m_eoiSEIOrigPicHeight;
+  bool m_eoiSEISpatialResamplingTypeFlag;
+  uint32_t m_eoiSEIPrivacyProtectionTypeIdc;
+  uint32_t m_eoiSEIPrivacyProtectedInfoType;
+#endif
+
 #if SEI_ENCODER_CONTROL
   // film grain characterstics sei
   Bool      m_fgcSEIEnabled;

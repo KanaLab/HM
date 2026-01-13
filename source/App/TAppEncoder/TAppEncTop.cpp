@@ -491,6 +491,26 @@ Void TAppEncTop::xInitLibCfg()
   m_cTEncTop.setSiiSEITimeScale                                   (m_siiSEITimeScale);
   m_cTEncTop.setSiiSEISubLayerNumUnitsInSI                        (m_siiSEISubLayerNumUnitsInSI);
 #endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  m_cTEncTop.setEOISEIEnabled(m_eoiSEIEnabled);
+  m_cTEncTop.setEOISEICancelFlag(m_eoiSEICancelFlag);
+  m_cTEncTop.setEOISEIPersistenceFlag(m_eoiSEIPersistenceFlag);
+  m_cTEncTop.setEOISEIForHumanViewingIdc(m_eoiSEIForHumanViewingIdc);
+  m_cTEncTop.setEOISEIForMachineAnalysisIdc(m_eoiSEIForMachineAnalysisIdc);
+  m_cTEncTop.setEOISEIType(m_eoiSEIType);
+  m_cTEncTop.setEOISEIObjectBasedIdc(m_eoiSEIObjectBasedIdc);
+  m_cTEncTop.setEOISEIQuantThresholdDelta(m_eoiSEIQuantThresholdDelta);
+  m_cTEncTop.setEOISEIPicQuantObjectFlag(m_eoiSEIPicQuantObjectFlag);
+  m_cTEncTop.setEOISEITemporalResamplingTypeFlag(m_eoiSEITemporalResamplingTypeFlag);
+  m_cTEncTop.setEOISEINumIntPics(m_eoiSEINumIntPics);
+  m_cTEncTop.setEOISEISrcPicFlag(m_eoiSEISrcPicFlag);
+  m_cTEncTop.setEOISEIOrigPicDimensionsFlag(m_eoiSEIOrigPicDimensionsFlag);
+  m_cTEncTop.setEOISEIOrigPicWidth(m_eoiSEIOrigPicWidth);
+  m_cTEncTop.setEOISEIOrigPicHeight(m_eoiSEIOrigPicHeight);
+  m_cTEncTop.setEOISEISpatialResamplingTypeFlag(m_eoiSEISpatialResamplingTypeFlag);
+  m_cTEncTop.setEOISEIPrivacyProtectionTypeIdc(m_eoiSEIPrivacyProtectionTypeIdc);
+  m_cTEncTop.setEOISEIPrivacyProtectedInfoType(m_eoiSEIPrivacyProtectedInfoType);
+#endif
 #if SEI_ENCODER_CONTROL
 // film grain charcteristics
   m_cTEncTop.setFilmGrainCharactersticsSEIEnabled                 (m_fgcSEIEnabled);

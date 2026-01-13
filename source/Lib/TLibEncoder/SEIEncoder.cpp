@@ -590,7 +590,58 @@ Void SEIEncoder::initSEIContentColourVolume(SEIContentColourVolume *seiContentCo
     seiContentColourVolume->m_ccvAvgLuminanceValue = (Int) (10000000 * m_pcCfg->getCcvSEIAvgLuminanceValue());
   }
 }
-
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+void SEIEncoder::initSEIEncoderOptimizationInfo(SEIEncoderOptimizationInfo *sei)
+{
+  sei->m_cancelFlag = m_pcCfg->getEOISEICancelFlag();
+  if (!sei->m_cancelFlag)
+  {
+    sei->m_persistenceFlag = m_pcCfg->getEOISEIPersistenceFlag();
+    sei->m_forHumanViewingIdc = m_pcCfg->getEOISEIForHumanViewingIdc();
+    sei->m_forMachineAnalysisIdc = m_pcCfg->getEOISEIForMachineAnalysisIdc();
+    sei->m_type = m_pcCfg->getEOISEIType();
+    if ((sei->m_type & EOI_OptimizationType::OBJECT_BASED_OPTIMIZATION) != 0)
+    {
+      sei->m_objectBasedIdc = m_pcCfg->getEOISEIObjectBasedIdc();
+      if (sei->m_objectBasedIdc & EOI_OBJECT_BASED::COARSER_QUANTIZATION)
+      {
+        sei->m_quantThresholdDelta = m_pcCfg->getEOISEIQuantThresholdDelta();
+        if (sei->m_quantThresholdDelta > 0)
+        {
+          sei->m_picQuantObjectFlag = m_pcCfg->getEOISEIPicQuantObjectFlag();
+        }
+      }
+    }
+    if ((sei->m_type & EOI_OptimizationType::TEMPORAL_RESAMPLING) != 0)
+    {
+      sei->m_temporalResamplingTypeFlag = m_pcCfg->getEOISEITemporalResamplingTypeFlag();
+      sei->m_numIntPics = m_pcCfg->getEOISEINumIntPics();
+      if (sei->m_temporalResamplingTypeFlag && sei->m_numIntPics > 0)
+      {
+        sei->m_srcPicFlag = m_pcCfg->getEOISEISrcPicFlag();
+      }
+    }
+    if ((sei->m_type & EOI_OptimizationType::SPATIAL_RESAMPLING) != 0)
+    {
+      sei->m_origPicDimensionsFlag = m_pcCfg->getEOISEIOrigPicDimensionsFlag();
+      if (sei->m_origPicDimensionsFlag)
+      {
+        sei->m_origPicWidth = m_pcCfg->getEOISEIOrigPicWidth();
+        sei->m_origPicHeight = m_pcCfg->getEOISEIOrigPicHeight();
+      }
+      else
+      {
+        sei->m_spatialResamplingTypeFlag = m_pcCfg->getEOISEISpatialResamplingTypeFlag();
+      }
+    }
+    if ((sei->m_type & EOI_OptimizationType::PRIVACY_PROTECTION_OPTIMIZATION) != 0)
+    {
+      sei->m_privacyProtectionTypeIdc = m_pcCfg->getEOISEIPrivacyProtectionTypeIdc();
+      sei->m_privacyProtectedInfoType = m_pcCfg->getEOISEIPrivacyProtectedInfoType();
+    }
+  }
+}
+#endif
 #if SHUTTER_INTERVAL_SEI_MESSAGE
 Void SEIEncoder::initSEIShutterIntervalInfo(SEIShutterIntervalInfo *seiShutterIntervalInfo)
 {

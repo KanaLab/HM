@@ -98,6 +98,10 @@ const std::vector<SEI::PayloadType> SEI::prefix_sei_messages({
   SEI::DIGITALLY_SIGNED_CONTENT_INITIALIZATION,
   SEI::DIGITALLY_SIGNED_CONTENT_SELECTION,
 #endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  SEI::ENCODER_OPTIMIZATION_INFO
+#endif
+
 });
 
 const std::vector<SEI::PayloadType> SEI::suffix_sei_messages({
@@ -108,6 +112,9 @@ const std::vector<SEI::PayloadType> SEI::suffix_sei_messages({
   SEI::POST_FILTER_HINT,
   SEI::DECODED_PICTURE_HASH,
   SEI::CODED_REGION_COMPLETION,
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  SEI::ENCODER_OPTIMIZATION_INFO,
+#endif
 #if JVET_AK0194_DSC_SEI_DECODER_SYNTAX
   SEI::DIGITALLY_SIGNED_CONTENT_VERIFICATION,
 #endif
@@ -398,6 +405,9 @@ const TChar *SEI::getSEIMessageString(SEI::PayloadType payloadType)
 #endif
 #if JVET_AE0101_PHASE_INDICATION_SEI_MESSAGE
     case SEI::PHASE_INDICATION:                     return "Phase Indication";
+#endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+    case SEI::ENCODER_OPTIMIZATION_INFO:            return "Encoder optimization information";
 #endif
 #if JVET_AK0107_MODALITY_INFORMATION
     case SEI::MODALITY_INFORMATION:                 return "Modality information";

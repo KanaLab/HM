@@ -246,6 +246,14 @@ Void SEIWriter::xWriteSEIpayloadData(TComBitIf& bs, const SEI& sei, const TComSP
     xWriteSEIPhaseIndication(*static_cast<const SEIPhaseIndication *>(&sei));
     break;
 #endif
+
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  case SEI::ENCODER_OPTIMIZATION_INFO:
+    xWriteSEIEncoderOptimizationInfo(*static_cast<const SEIEncoderOptimizationInfo *>(&sei));
+    break;
+#endif
+
+
 #if JVET_AK0107_MODALITY_INFORMATION
   case SEI::PayloadType::MODALITY_INFORMATION:
     xWriteSEIModalityInfo(*static_cast<const SEIModalityInfo *>(&sei));
@@ -1259,6 +1267,61 @@ void SEIWriter::xWriteSEIPhaseIndication(const SEIPhaseIndication& sei)
   WRITE_CODE((uint32_t)sei.m_horPhaseDenMinus1, 8, "hor_phase_den_minus1");
   WRITE_CODE((uint32_t)sei.m_verPhaseNum, 8, "ver_phase_num");
   WRITE_CODE((uint32_t)sei.m_verPhaseDenMinus1, 8, "ver_phase_den_minus1");
+}
+#endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+void SEIWriter::xWriteSEIEncoderOptimizationInfo(const SEIEncoderOptimizationInfo &sei)
+{
+  WRITE_FLAG(sei.m_cancelFlag, "eoi_cancel_flag");
+  if (!sei.m_cancelFlag)
+  {
+    WRITE_FLAG(sei.m_persistenceFlag, "eoi_persistence_flag");
+    WRITE_CODE(sei.m_forHumanViewingIdc, 2, "eoi_for_human_viewing_idc");
+    WRITE_CODE(sei.m_forMachineAnalysisIdc, 2, "eoi_for_machine_analysis_idc");
+    WRITE_CODE(0, 2, "eoi_reserved_zero_2bits");
+    WRITE_CODE(sei.m_type, 16, "eoi_type");
+
+
+    if ((sei.m_type & EOI_OptimizationType::OBJECT_BASED_OPTIMIZATION) != 0)
+    {
+      WRITE_CODE(sei.m_objectBasedIdc, 16, "eoi_object_based_idc");
+      if (sei.m_objectBasedIdc & EOI_OBJECT_BASED::COARSER_QUANTIZATION)
+      {
+        WRITE_UVLC(sei.m_quantThresholdDelta, "eoi_quant_threshold_delta");
+        if (sei.m_quantThresholdDelta > 0)
+        {
+          WRITE_FLAG(sei.m_picQuantObjectFlag, "eoi_pic_quant_object_flag");
+        }
+      }
+    }
+    if ((sei.m_type & EOI_OptimizationType::TEMPORAL_RESAMPLING) != 0)
+    {
+      WRITE_FLAG(sei.m_temporalResamplingTypeFlag, "eoi_temporal_resampling_type_flag");
+      WRITE_UVLC(sei.m_numIntPics, "eoi_num_int_pics");
+      if (sei.m_temporalResamplingTypeFlag && sei.m_numIntPics > 0)
+      {
+        WRITE_FLAG(sei.m_srcPicFlag, "eoi_src_pic_flag");
+      }
+    }
+    if ((sei.m_type & EOI_OptimizationType::SPATIAL_RESAMPLING) != 0)
+    {
+      WRITE_FLAG(sei.m_origPicDimensionsFlag, "eoi_orig_pic_dimensions_flag");
+      if (sei.m_origPicDimensionsFlag)
+      {
+        WRITE_CODE(sei.m_origPicWidth, 16, "eoi_orig_pic_width");
+        WRITE_CODE(sei.m_origPicHeight, 16, "eoi_orig_pic_height");
+      }
+      else
+      {
+        WRITE_FLAG(sei.m_spatialResamplingTypeFlag, "eoi_spatial_resampling_type_flag");
+      }
+    }
+    if ((sei.m_type & EOI_OptimizationType::PRIVACY_PROTECTION_OPTIMIZATION) != 0)
+    {
+      WRITE_CODE(sei.m_privacyProtectionTypeIdc, 16, "eoi_privacy_protection_type_idc");
+      WRITE_CODE(sei.m_privacyProtectedInfoType, 8, "eoi_privacy_protected_info_type");
+    }
+  }
 }
 #endif
 

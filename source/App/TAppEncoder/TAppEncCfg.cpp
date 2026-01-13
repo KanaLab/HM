@@ -1225,6 +1225,28 @@ Bool TAppEncCfg::parseCfg( Int argc, TChar* argv[] )
   ("SEIPIVerPhaseNumFullResolution", m_piVerPhaseNumFullResolution, 0, "Specifies the Vertical Phase Numerator of Phase Indication SEI messages for full resolution pictures.")
   ("SEIPIVerPhaseDenMinus1FullResolution", m_piVerPhaseDenMinus1FullResolution, 0, "Specifies the Vertical Phase Denominator minus 1 of Phase Indication SEI messages for full resolution pictures.")
 #endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  ("SEIEOIEnabled", m_eoiSEIEnabled, false, "Control use of the Encoder Optimization Information SEI")
+  ("SEIEOICancelFlag", m_eoiSEICancelFlag, false, "Specifies that the persistence of the previous applied optimization")
+  ("SEIEOIPersistenceFlag", m_eoiSEIPersistenceFlag, false, "Specifies the persistence of the optimization the current layer")
+  ("SEIEOIForHumanViewingIdc", m_eoiSEIForHumanViewingIdc, 0u, "Indicates the level of optimization for human viewing")
+  ("SEIEOIForMachineAnalysisIdc", m_eoiSEIForMachineAnalysisIdc, 0u, "Indicates the level of optimization for  machine analsysis")
+  ("SEIEOIType", m_eoiSEIType, 0u, "Indicates the types of optimization method")
+  ("SEIEOIObjectBasedIdc", m_eoiSEIObjectBasedIdc, 0u, "Indicates the type of object-based optimization")
+  ("SEIEOIQuantThresholdDelta", m_eoiSEIQuantThresholdDelta, 0u, "Indicates the quantization parameter threshold determining areas classified to be outside the detected objects or to include one or more detected objects (0 = unknown or unspecified)")
+  ("SEIEOIPicQuantObjectFlag", m_eoiSEIPicQuantObjectFlag, false, "Value of 1 indicates that areas with QP >= PicQuant + SEIEOIQuantThresholdDelta represent areas outside the detected objects. Value of 0 indicates that areas with QP <= PicQuant - SEIEOIQuantThresholdDelta represent areas that include objects")
+  ("SEIEOITemporalResamplingTypeFlag", m_eoiSEITemporalResamplingTypeFlag, false, "specifies the type of the temporal resampling optimization.")
+  ("SEIEOINumIntPics", m_eoiSEINumIntPics, 0u, "indicates that the count of pictures that the encoding system excluded or added between each pair of coded pictures in output order within the persistence of this SEI message is constant")
+  ("SEIEOISrcPicFlag", m_eoiSEISrcPicFlag, false, "Value of 1 specifies that the picture in the same access unit that contains the EOI SEI message is a source picture. Value of 0 provides no such indication.that areas with QP >= PicQuant + SEIEOIQuantThresholdDelta represent areas outside the detected objects. Value of 0 indicates that areas with QP <= PicQuant - SEIEOIQuantThresholdDelta represent areas that include objects")
+  ("SEIEOIOrigPicDimensionsFlag", m_eoiSEIOrigPicDimensionsFlag, false, "specifies if original source picture dimensions are present.")
+  ("SEIEOIOrigPicWidth", m_eoiSEIOrigPicWidth, 0u, "indicates the width of the original source picture.")
+  ("SEIEOIOrigPicHeight", m_eoiSEIOrigPicHeight, 0u, "indicates the height of the original source picture.")
+  ("SEIEOISpatialResamplingTypeFlag", m_eoiSEISpatialResamplingTypeFlag, false, "specifies the type of the spatial resampling optimization.")
+  ("SEIEOIPrivacyProtectionTypeIdc", m_eoiSEIPrivacyProtectionTypeIdc, 0u, "indicates the type of privacy protection optimization")
+  ("SEIEOIPrivacyProtectedInfoType", m_eoiSEIPrivacyProtectedInfoType, 0u, "indicates the types of protected information")
+#endif 
+
+
 #if SHUTTER_INTERVAL_SEI_MESSAGE
   ("SEIShutterIntervalEnabled",                       m_siiSEIEnabled,                           false,                                   "Controls if shutter interval information SEI message is enabled")
   ("SEISiiTimeScale",                                 m_siiSEITimeScale,                         27000000u,                               "Specifies sii_time_scale")
