@@ -487,6 +487,7 @@ protected:
   UInt                    m_siiSEITimeScale;
   std::vector<UInt>       m_siiSEISubLayerNumUnitsInSI;
 #endif
+
 #if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
   // Encoder Optimization Information SEI
   Bool  m_eoiSEIEnabled;
@@ -507,6 +508,14 @@ protected:
   Bool m_eoiSEISpatialResamplingTypeFlag;
   uint32_t m_eoiSEIPrivacyProtectionTypeIdc;
   uint32_t m_eoiSEIPrivacyProtectedInfoType;
+#endif
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  bool m_sptiSEIEnabled;
+  bool m_sptiSourceTimingEqualsOutputTimingFlag;
+  uint32_t m_sptiSourceType;
+  uint32_t m_sptiTimeScale;
+  uint32_t m_sptiNumUnitsInElementalInterval;
+  bool m_sptiDirectionFlag;
 #endif
 #if SEI_ENCODER_CONTROL
   // film grain characterstics sei
@@ -616,6 +625,36 @@ protected:
   Bool        m_SEIPrefixIndicationSEIEnabled;
 #endif
 
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  bool     m_priSEIEnabled;
+  bool     m_priSEICancelFlag;
+  bool     m_priSEIPersistenceFlag;
+  uint32_t m_priSEINumRegionsMinus1;
+  bool     m_priSEIMultilayerFlag;
+  bool     m_priSEIUseMaxDimensionsFlag;
+  uint32_t m_priSEILog2UnitSize;
+  uint32_t m_priSEIRegionSizeLenMinus1;
+  bool     m_priSEIRegionIdPresentFlag;
+  bool     m_priSEITargetPicParamsPresentFlag;
+  uint32_t m_priSEITargetPicWidthMinus1;
+  uint32_t m_priSEITargetPicHeightMinus1;
+  uint32_t m_priSEINumResamplingRatiosMinus1;
+  std::vector<uint32_t> m_priSEIResamplingWidthNumMinus1;
+  std::vector<uint32_t> m_priSEIResamplingWidthDenomMinus1;
+  std::vector<bool>     m_priSEIFixedAspectRatioFlag;
+  std::vector<uint32_t> m_priSEIResamplingHeightNumMinus1;
+  std::vector<uint32_t> m_priSEIResamplingHeightDenomMinus1;
+  std::vector<uint32_t> m_priSEIRegionId;
+  std::vector<uint32_t> m_priSEIRegionLayerId;
+  std::vector<bool>     m_priSEIRegionIsALayerFlag;
+  std::vector<uint32_t> m_priSEIRegionTopLeftInUnitsX;
+  std::vector<uint32_t> m_priSEIRegionTopLeftInUnitsY;
+  std::vector<uint32_t> m_priSEIRegionWidthInUnitsMinus1;
+  std::vector<uint32_t> m_priSEIRegionHeightInUnitsMinus1;
+  std::vector<uint32_t> m_priSEIResamplingRatioIdx;
+  std::vector<uint32_t> m_priSEITargetRegionTopLeftInUnitsX;
+  std::vector<uint32_t> m_priSEITargetRegionTopLeftInUnitsY;
+#endif
 
 public:
   TEncCfg()
@@ -1565,6 +1604,79 @@ public:
   Bool     getSEIPrefixIndicationSEIEnabled() { return m_SEIPrefixIndicationSEIEnabled; }
 #endif
 
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  void     setPriSEIEnabled(bool b)                                       { m_priSEIEnabled = b; }
+  bool     getPriSEIEnabled()                                             { return m_priSEIEnabled; }
+  void     setPriSEICancelFlag(bool b)                                    { m_priSEICancelFlag = b; }
+  bool     getPriSEICancelFlag()                                          { return m_priSEICancelFlag; }
+  void     setPriSEIPersistenceFlag(bool b)                               { m_priSEIPersistenceFlag = b; }
+  bool     getPriSEIPersistenceFlag()                                     { return m_priSEIPersistenceFlag; }
+  void     setPriSEINumRegionsMinus1(uint32_t i)                          { m_priSEINumRegionsMinus1 = i; }
+  uint32_t getPriSEINumRegionsMinus1()                                    { return m_priSEINumRegionsMinus1; }
+  void     setPriSEIMultilayerFlag(bool b)                                { m_priSEIMultilayerFlag = b; }
+  bool     getPriSEIMultilayerFlag()                                      { return m_priSEIMultilayerFlag; }
+  void     setPriSEIUseMaxDimensionsFlag(bool b)                          { m_priSEIUseMaxDimensionsFlag = b; }
+  bool     getPriSEIUseMaxDimensionsFlag()                                { return m_priSEIUseMaxDimensionsFlag; }
+  void     setPriSEILog2UnitSize(uint32_t i)                              { m_priSEILog2UnitSize = i; }
+  uint32_t getPriSEILog2UnitSize()                                        { return m_priSEILog2UnitSize; }
+  void     setPriSEIRegionSizeLenMinus1(uint32_t i)                       { m_priSEIRegionSizeLenMinus1 = i; }
+  uint32_t getPriSEIRegionSizeLenMinus1()                                 { return m_priSEIRegionSizeLenMinus1; }
+  void     setPriSEIRegionIdPresentFlag(bool b)                           { m_priSEIRegionIdPresentFlag = b; }
+  bool     getPriSEIRegionIdPresentFlag()                                 { return m_priSEIRegionIdPresentFlag; }
+  void     setPriSEITargetPicParamsPresentFlag(bool b)                    { m_priSEITargetPicParamsPresentFlag = b; }
+  bool     getPriSEITargetPicParamsPresentFlag()                          { return m_priSEITargetPicParamsPresentFlag; }
+  void     setPriSEITargetPicWidthMinus1(uint32_t i)                      { m_priSEITargetPicWidthMinus1 = i; }
+  uint32_t getPriSEITargetPicWidthMinus1()                                { return m_priSEITargetPicWidthMinus1; }
+  void     setPriSEITargetPicHeightMinus1(uint32_t i)                     { m_priSEITargetPicHeightMinus1 = i; }
+  uint32_t getPriSEITargetPicHeightMinus1()                               { return m_priSEITargetPicHeightMinus1; }
+  void     setPriSEINumResamplingRatiosMinus1(uint32_t i)                 { m_priSEINumResamplingRatiosMinus1 = i; }
+  uint32_t getPriSEINumResamplingRatiosMinus1()                           { return m_priSEINumResamplingRatiosMinus1; }
+  void     setPriSEIResamplingWidthNumMinus1(std::vector<uint32_t>& b)    { m_priSEIResamplingWidthNumMinus1 = b; }
+  uint32_t getPriSEIResamplingWidthNumMinus1(int i)                       { return m_priSEIResamplingWidthNumMinus1[i]; }
+  void     setPriSEIResamplingWidthDenomMinus1(std::vector<uint32_t>& b)  { m_priSEIResamplingWidthDenomMinus1 = b; }
+  uint32_t getPriSEIResamplingWidthDenomMinus1(int i)                     { return m_priSEIResamplingWidthDenomMinus1[i]; }
+  void     setPriSEIFixedAspectRatioFlag(std::vector<bool>& b)            { m_priSEIFixedAspectRatioFlag = b; }
+  bool     getPriSEIFixedAspectRatioFlag(int i)                           { return m_priSEIFixedAspectRatioFlag[i]; }
+  void     setPriSEIResamplingHeightNumMinus1(std::vector<uint32_t>& b)   { m_priSEIResamplingHeightNumMinus1 = b; }
+  uint32_t getPriSEIResamplingHeightNumMinus1(int i)                      { return m_priSEIResamplingHeightNumMinus1[i]; }
+  void     setPriSEIResamplingHeightDenomMinus1(std::vector<uint32_t>& b) { m_priSEIResamplingHeightDenomMinus1 = b; }
+  uint32_t getPriSEIResamplingHeightDenomMinus1(int i)                    { return m_priSEIResamplingHeightDenomMinus1[i]; }
+  void     setPriSEIRegionId(std::vector<uint32_t>& b)                    { m_priSEIRegionId = b; }
+  uint32_t getPriSEIRegionId(int i)                                       { return m_priSEIRegionId[i]; }
+  void     setPriSEIRegionLayerId(std::vector<uint32_t>& b)               { m_priSEIRegionLayerId = b; }
+  uint32_t getPriSEIRegionLayerId(int i)                                  { return m_priSEIRegionLayerId[i]; }
+  void     setPriSEIRegionIsALayerFlag(std::vector<bool>& b)              { m_priSEIRegionIsALayerFlag = b; }
+  uint32_t getPriSEIRegionIsALayerFlag(int i)                             { return m_priSEIRegionIsALayerFlag[i]; }
+  void     setPriSEIRegionTopLeftInUnitsX(std::vector<uint32_t>& b)       { m_priSEIRegionTopLeftInUnitsX = b; }
+  uint32_t getPriSEIRegionTopLeftInUnitsX(int i)                          { return m_priSEIRegionTopLeftInUnitsX[i]; }
+  void     setPriSEIRegionTopLeftInUnitsY(std::vector<uint32_t>& b)       { m_priSEIRegionTopLeftInUnitsY = b; }
+  uint32_t getPriSEIRegionTopLeftInUnitsY(int i)                          { return m_priSEIRegionTopLeftInUnitsY[i]; }
+  void     setPriSEIRegionWidthInUnitsMinus1(std::vector<uint32_t>& b)    { m_priSEIRegionWidthInUnitsMinus1 = b; }
+  uint32_t getPriSEIRegionWidthInUnitsMinus1(int i)                       { return m_priSEIRegionWidthInUnitsMinus1[i]; }
+  void     setPriSEIRegionHeightInUnitsMinus1(std::vector<uint32_t>& b)   { m_priSEIRegionHeightInUnitsMinus1 = b; }
+  uint32_t getPriSEIRegionHeightInUnitsMinus1(int i)                      { return m_priSEIRegionHeightInUnitsMinus1[i]; }
+  void     setPriSEIResamplingRatioIdx(std::vector<uint32_t>& b)          { m_priSEIResamplingRatioIdx = b; }
+  uint32_t getPriSEIResamplingRatioIdx(int i)                             { return m_priSEIResamplingRatioIdx[i]; }
+  void     setPriSEITargetRegionTopLeftInUnitsX(std::vector<uint32_t>& b) { m_priSEITargetRegionTopLeftInUnitsX = b; }
+  uint32_t getPriSEITargetRegionTopLeftInUnitsX(int i) { return m_priSEITargetRegionTopLeftInUnitsX[i]; }
+  void     setPriSEITargetRegionTopLeftInUnitsY(std::vector<uint32_t>& b) { m_priSEITargetRegionTopLeftInUnitsY = b; }
+  uint32_t getPriSEITargetRegionTopLeftInUnitsY(int i) { return m_priSEITargetRegionTopLeftInUnitsY[i]; }
+#endif
+
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  void setSptiSEIEnabled(bool b) { m_sptiSEIEnabled = b; }
+  bool getSptiSEIEnabled() { return m_sptiSEIEnabled; }
+  void setmSptiSEISourceTimingEqualsOutputTimingFlag(bool b) { m_sptiSourceTimingEqualsOutputTimingFlag = b; }
+  bool getmSptiSEISourceTimingEqualsOutputTimingFlag() { return m_sptiSourceTimingEqualsOutputTimingFlag; }
+  void setmSptiSEISourceType(uint32_t b) { m_sptiSourceType = b; }
+  uint32_t getmSptiSEISourceType() { return m_sptiSourceType; }
+  void setmSptiSEITimeScale(uint32_t b) { m_sptiTimeScale = b; }
+  uint32_t getmSptiSEITimeScale() { return m_sptiTimeScale; }
+  void setmSptiSEINumUnitsInElementalInterval(uint32_t b) { m_sptiNumUnitsInElementalInterval = b; }
+  uint32_t getmSptiSEINumUnitsInElementalInterval() { return m_sptiNumUnitsInElementalInterval; }
+  void setmSptiSEIDirectionFlag(bool b) { m_sptiDirectionFlag = b; }
+  uint32_t getmSptiSEIDirectionFlag() { return m_sptiDirectionFlag; }
+#endif
 };
 
 

@@ -137,6 +137,12 @@ protected:
   void xParseSEIDigitallySignedContentSelection     (SEIDigitallySignedContentSelection &sei, uint32_t payloadSize, std::ostream *pDecodedMessageOutputStream);
   void xParseSEIDigitallySignedContentVerification  (SEIDigitallySignedContentVerification &sei, uint32_t payloadSize, std::ostream *pDecodedMessageOutputStream);
 #endif
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  void xParsePackedRegionsInfo(SEIPackedRegionsInfo &sei, uint32_t payLoadSize, std::ostream *pDecodedMessageOutputStream);
+#endif
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  void xParseSEISourcePictureTimingInfo(SEISourcePictureTimingInfo &sei, uint32_t payloadSize, std::ostream *pDecodedMessageOutputStream);
+#endif
 
   Void xTraceSEIHeader();
   Void xTraceSEIMessageType(SEI::PayloadType payloadType);

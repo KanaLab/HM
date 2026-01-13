@@ -37,6 +37,7 @@
 #pragma once
 #include <list>
 #include <vector>
+#include <array>
 #include <cstring>
 #include <map>
 
@@ -117,9 +118,11 @@ public:
 #if JVET_AE0101_PHASE_INDICATION_SEI_MESSAGE
     PHASE_INDICATION                     = 212,
 #endif
-
 #if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
-    ENCODER_OPTIMIZATION_INFO = 215,
+    ENCODER_OPTIMIZATION_INFO            = 215,
+#endif
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+    SOURCE_PICTURE_TIMING_INFO           = 216,
 #endif
 #if JVET_AK0107_MODALITY_INFORMATION
     MODALITY_INFORMATION                 = 218,
@@ -128,6 +131,9 @@ public:
     DIGITALLY_SIGNED_CONTENT_INITIALIZATION = 220,
     DIGITALLY_SIGNED_CONTENT_SELECTION      = 221,
     DIGITALLY_SIGNED_CONTENT_VERIFICATION   = 222,
+#endif
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+    PACKED_REGIONS_INFO                     = 226,
 #endif
   };
 
@@ -1040,6 +1046,40 @@ public:
 };
 #endif
 
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+class SEISourcePictureTimingInfo : public SEI 
+{
+public:
+  PayloadType payloadType() const { return PayloadType::SOURCE_PICTURE_TIMING_INFO; }
+  SEISourcePictureTimingInfo(int temporalId)
+      : m_sptiSourceTimingEqualsOutputTimingFlag(false), m_sptiSourceType(0),
+        m_sptiTimeScale(27000000), m_sptiNumUnitsInElementalInterval(1080000),
+        m_sptiDirectionFlag(false), m_sptiCancelFlag(false),
+        m_sptiPersistenceFlag(true), m_sptiSourceTypePresentFlag(false),
+        m_sptiMaxSublayersMinus1(temporalId) 
+  {
+    m_sptiSublayerIntervalScaleFactor.resize(MAX_TLAYER + 1, 0);
+    m_sptiSublayerSynthesizedPictureFlag.fill(false);
+  }
+
+  SEISourcePictureTimingInfo(const SEISourcePictureTimingInfo &sei);
+  virtual ~SEISourcePictureTimingInfo() {}
+
+  bool m_sptiSEIEnabled;
+  bool m_sptiSourceTimingEqualsOutputTimingFlag;
+  uint32_t m_sptiSourceType;
+  uint32_t m_sptiTimeScale;
+  uint32_t m_sptiNumUnitsInElementalInterval;
+  bool m_sptiDirectionFlag;
+  bool m_sptiCancelFlag;
+  bool m_sptiPersistenceFlag;
+  bool m_sptiSourceTypePresentFlag;
+  uint32_t m_sptiMaxSublayersMinus1;
+  std::vector<uint32_t> m_sptiSublayerIntervalScaleFactor;
+  std::array<bool, MAX_TLAYER + 1> m_sptiSublayerSynthesizedPictureFlag;
+};
+#endif
+
 #if JVET_AE0101_PHASE_INDICATION_SEI_MESSAGE
 class SEIPhaseIndication : public SEI
 {
@@ -1362,5 +1402,58 @@ public:
   uint8_t getNumsOfSeiPrefixIndications(const SEI* sei);
 };
 #endif 
+
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+class SEIPackedRegionsInfo : public SEI
+{
+public:
+  PayloadType payloadType() const { return PayloadType::PACKED_REGIONS_INFO; }
+  SEIPackedRegionsInfo()
+    : m_layerId(0)
+    , m_cancelFlag(false)
+    , m_persistenceFlag(false)
+    , m_numRegionsMinus1(0)
+    , m_useMaxDimensionsFlag(false)
+    , m_log2UnitSize(0)
+    , m_regionSizeLenMinus1(0)
+    , m_regionIdPresentFlag(false)
+    , m_multilayerFlag(false)
+    , m_targetPicParamsPresentFlag(false)
+    , m_targetPicWidthMinus1(0)
+    , m_targetPicHeightMinus1(0)
+    , m_numResamplingRatiosMinus1(0)
+  {}
+  virtual ~SEIPackedRegionsInfo() {}
+
+  int      m_layerId;
+  bool     m_cancelFlag;
+  bool     m_persistenceFlag;
+  uint32_t m_numRegionsMinus1;
+  bool     m_useMaxDimensionsFlag;
+  uint32_t m_log2UnitSize;
+  uint32_t m_regionSizeLenMinus1;
+  bool     m_regionIdPresentFlag;
+  bool     m_multilayerFlag;
+  bool     m_targetPicParamsPresentFlag;
+  uint32_t m_targetPicWidthMinus1;
+  uint32_t m_targetPicHeightMinus1;
+  uint32_t m_numResamplingRatiosMinus1;
+  std::vector<uint32_t> m_resamplingWidthNumMinus1;
+  std::vector<uint32_t> m_resamplingWidthDenomMinus1;
+  std::vector<bool>     m_fixedAspectRatioFlag;
+  std::vector<uint32_t> m_resamplingHeightNumMinus1;
+  std::vector<uint32_t> m_resamplingHeightDenomMinus1;
+  std::vector<uint32_t> m_regionId;
+  std::vector<uint32_t> m_regionTopLeftInUnitsX;
+  std::vector<uint32_t> m_regionTopLeftInUnitsY;
+  std::vector<uint32_t> m_regionWidthInUnitsMinus1;
+  std::vector<uint32_t> m_regionHeightInUnitsMinus1;
+  std::vector<uint32_t> m_resamplingRatioIdx;
+  std::vector<uint32_t> m_targetRegionTopLeftInUnitsX;
+  std::vector<uint32_t> m_targetRegionTopLeftInUnitsY;
+  std::vector<uint32_t> m_regionLayerId;
+  std::vector<uint8_t>  m_regionIsALayerFlag;
+};
+#endif
 
 //! \}

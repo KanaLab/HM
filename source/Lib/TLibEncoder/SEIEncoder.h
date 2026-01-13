@@ -129,11 +129,16 @@ public:
   void initSEIDigitallySignedContentSelection(SEIDigitallySignedContentSelection *sei, int substream);
   void initSEIDigitallySignedContentVerification(SEIDigitallySignedContentVerification *sei, int32_t substream, const std::vector<uint8_t> &signature);
 #endif
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  void initSEIPackedRegionsInfo(SEIPackedRegionsInfo *sei);
+#endif
   // trailing SEIs
   Void initDecodedPictureHashSEI(SEIDecodedPictureHash *sei, TComPic *pcPic, std::string &rHashString, const BitDepths &bitDepths);
   Void initTemporalLevel0IndexSEI(SEITemporalLevel0Index *sei, TComSlice *slice);
   Void initSEIGreenMetadataInfo(SEIGreenMetadataInfo *sei, UInt u);
-
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  void initSEISourcePictureTimingInfo(SEISourcePictureTimingInfo *SEISourcePictureTimingInfo);
+#endif
 private:
   TEncCfg* m_pcCfg;
   TEncTop* m_pcEncTop;

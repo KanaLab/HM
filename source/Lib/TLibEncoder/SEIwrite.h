@@ -158,8 +158,9 @@ protected:
   void xWriteSEIDigitallySignedContentSelection(const SEIDigitallySignedContentSelection &sei);
   void xWriteSEIDigitallySignedContentVerification(const SEIDigitallySignedContentVerification &sei);
 #endif
-
-
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  void xWriteSEIPackedRegionsInfo(const SEIPackedRegionsInfo& sei);
+#endif
 #if SHUTTER_INTERVAL_SEI_MESSAGE
   Void xWriteSEIShutterInterval                   (const SEIShutterIntervalInfo& sei);
 #endif
@@ -178,6 +179,9 @@ protected:
   Void  xTraceSEIHeader();
   Void  xTraceSEIMessageType(SEI::PayloadType payloadType);
   Void xWriteByteAlign();
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  void xWriteSEISourcePictureTimingInfo(const SEISourcePictureTimingInfo &sei);
+#endif
 };
 
 //! \}

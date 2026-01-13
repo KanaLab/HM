@@ -68,6 +68,8 @@
 #define JVET_AK0194_DSC_SEI   1                      // Digitally signed content signing and verification (requires OpenSSL v3)
 #endif
 
+#define JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI        1
+
 // ====================================================================================================================
 // Debugging
 // ====================================================================================================================
@@ -123,6 +125,8 @@
 #define SHUTTER_INTERVAL_SEI_PROCESSING                   1 ///< JCTVC-AM0024: pre-/post-processing to use shutter interval SEI
 #endif
 #define JVET_AK0107_MODALITY_INFORMATION                  1 // Implementation of Modality Information SEI message
+
+#define JVET_AK2006_SPTI_SEI_MESSAGE                      1 // Implementation of Source Picture Timing Information SEI message
 // ====================================================================================================================
 // Tool Switches
 // ====================================================================================================================
