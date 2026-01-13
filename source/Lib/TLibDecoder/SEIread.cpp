@@ -44,7 +44,9 @@
 #include "SEIread.h"
 #include "TLibCommon/TComPicYuv.h"
 #include <iomanip>
-
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+#include <climits>
+#endif
 
 //! \ingroup TLibDecoder
 //! \{
@@ -434,6 +436,12 @@ Void SEIReader::xReadSEIPayloadData(Int const payloadType, Int const payloadSize
     case SEI::PayloadType::DIGITALLY_SIGNED_CONTENT_VERIFICATION:
       sei = new SEIDigitallySignedContentVerification;
       xParseSEIDigitallySignedContentVerification((SEIDigitallySignedContentVerification &) *sei, payloadSize, pDecodedMessageOutputStream);
+      break;
+#endif
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+    case SEI::PayloadType::SOURCE_PICTURE_TIMING_INFO:
+      sei = new SEISourcePictureTimingInfo(sps->getMaxTLayers() - 1);
+      xParseSEISourcePictureTimingInfo((SEISourcePictureTimingInfo &)*sei, payloadSize, pDecodedMessageOutputStream);
       break;
 #endif
     default:
@@ -2261,7 +2269,6 @@ void SEIReader::xParseSEIDigitallySignedContentInitialization(SEIDigitallySigned
       sei_read_code(pDecodedMessageOutputStream, 8, val, "dsci_content_uuid");
       sei.dsciContentUuid[i] = val;
     }
-
   }
 }
 
@@ -2314,6 +2321,57 @@ Void SEIReader::xParseSEIModalityInfo(SEIModalityInfo& sei, UInt payloadSize, st
     {
       UInt code2;
       sei_read_code(pDecodedMessageOutputStream, 1, code2, "reserved_modality_type_extension");   // Decoders shall ignore the presence and value of reserved_modality_type_extension                                                   
+    }
+  }
+}
+#endif
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+void SEIReader::xParseSEISourcePictureTimingInfo(SEISourcePictureTimingInfo &sei, uint32_t payloadSize, std::ostream *pDecodedMessageOutputStream) 
+{
+  uint32_t val;
+  output_sei_message_header(sei, pDecodedMessageOutputStream, payloadSize);
+  sei_read_flag(pDecodedMessageOutputStream, val, "spti_cancel_flag");
+  sei.m_sptiCancelFlag = val;
+  if (!sei.m_sptiCancelFlag) 
+  {
+    sei_read_flag(pDecodedMessageOutputStream, val, "spti_persistence_flag");
+    sei.m_sptiPersistenceFlag = val;
+    sei_read_flag(pDecodedMessageOutputStream, val, "spti_source_timing_equals_output_timing_flag");
+    sei.m_sptiSourceTimingEqualsOutputTimingFlag = val;
+    if (!sei.m_sptiSourceTimingEqualsOutputTimingFlag) 
+    {
+      sei_read_flag(pDecodedMessageOutputStream, val, "spti_source_type_present_flag");
+      sei.m_sptiSourceTypePresentFlag = val;
+      if (sei.m_sptiSourceTypePresentFlag) 
+      {
+        sei_read_code(pDecodedMessageOutputStream, 16, val, "spti_source_type");
+        sei.m_sptiSourceType = val;
+        assert(sei.m_sptiSourceType >= 0 && sei.m_sptiSourceType <= 127);
+      }
+      sei_read_code(pDecodedMessageOutputStream, 32, val, "spti_time_scale");
+      sei.m_sptiTimeScale = val;
+      assert(sei.m_sptiTimeScale != 0);
+      sei_read_code(pDecodedMessageOutputStream, 32, val, "spti_num_units_in_elemental_interval");
+      sei.m_sptiNumUnitsInElementalInterval = val;
+      assert(sei.m_sptiNumUnitsInElementalInterval != 0);
+
+      sei_read_flag(pDecodedMessageOutputStream, val, "spti_direction_flag");
+      sei.m_sptiDirectionFlag = val;
+      if (sei.m_sptiPersistenceFlag) 
+      {
+        sei_read_code(pDecodedMessageOutputStream, 3, val, "spti_max_sublayers_minus_1");
+        sei.m_sptiMaxSublayersMinus1 = val;
+      }
+      int sptiMinTemporalSublayer = (sei.m_sptiPersistenceFlag ? 0 : sei.m_sptiMaxSublayersMinus1);
+
+      for (int i = sptiMinTemporalSublayer; i <= sei.m_sptiMaxSublayersMinus1; i++) 
+      {
+        sei_read_uvlc(pDecodedMessageOutputStream, val, "spti_sublayer_interval_scale_factor");
+        assert(val >= 0 && val <= UINT_MAX - 1);
+        sei.m_sptiSublayerIntervalScaleFactor[i] = val;
+        sei_read_flag(pDecodedMessageOutputStream, val, "spti_sublayer_synthesized_picture_flag");
+        sei.m_sptiSublayerSynthesizedPictureFlag[i] = val;
+      }
     }
   }
 }
