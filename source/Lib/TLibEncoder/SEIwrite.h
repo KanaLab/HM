@@ -175,6 +175,9 @@ protected:
   Void  xTraceSEIHeader();
   Void  xTraceSEIMessageType(SEI::PayloadType payloadType);
   Void xWriteByteAlign();
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  void xWriteSEISourcePictureTimingInfo(const SEISourcePictureTimingInfo &sei);
+#endif
 };
 
 //! \}

@@ -631,6 +631,17 @@ Void TAppEncTop::xInitLibCfg()
 #if JCTVC_AD0021_SEI_PREFIX_INDICATION
   m_cTEncTop.setSEIPrefixIndicationSEIEnabled(m_SEIPrefixIndicationSEIEnabled);
 #endif
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  m_cTEncTop.setSptiSEIEnabled(m_sptiSEIEnabled);
+  if (m_sptiSEIEnabled) 
+  {
+    m_cTEncTop.setmSptiSEISourceTimingEqualsOutputTimingFlag(m_sptiSourceTimingEqualsOutputTimingFlag);
+    m_cTEncTop.setmSptiSEISourceType(m_sptiSourceType);
+    m_cTEncTop.setmSptiSEITimeScale(m_sptiTimeScale);
+    m_cTEncTop.setmSptiSEINumUnitsInElementalInterval(m_sptiNumUnitsInElementalInterval);
+    m_cTEncTop.setmSptiSEIDirectionFlag(m_sptiDirectionFlag);
+  }
+#endif
 }
 
 Void TAppEncTop::xCreateLib()

@@ -37,6 +37,7 @@
 #pragma once
 #include <list>
 #include <vector>
+#include <array>
 #include <cstring>
 #include <map>
 
@@ -116,6 +117,9 @@ public:
 #endif
 #if JVET_AE0101_PHASE_INDICATION_SEI_MESSAGE
     PHASE_INDICATION                     = 212,
+#endif
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+    SOURCE_PICTURE_TIMING_INFO           = 216,
 #endif
 #if JVET_AK0107_MODALITY_INFORMATION
     MODALITY_INFORMATION                 = 218,
@@ -990,6 +994,40 @@ public:
   UInt                  m_siiMaxSubLayersMinus1;
   Bool                  m_siiFixedSIwithinCLVS;
   std::vector<UInt>     m_siiSubLayerNumUnitsInSI;
+};
+#endif
+
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+class SEISourcePictureTimingInfo : public SEI 
+{
+public:
+  PayloadType payloadType() const { return PayloadType::SOURCE_PICTURE_TIMING_INFO; }
+  SEISourcePictureTimingInfo(int temporalId)
+      : m_sptiSourceTimingEqualsOutputTimingFlag(false), m_sptiSourceType(0),
+        m_sptiTimeScale(27000000), m_sptiNumUnitsInElementalInterval(1080000),
+        m_sptiDirectionFlag(false), m_sptiCancelFlag(false),
+        m_sptiPersistenceFlag(true), m_sptiSourceTypePresentFlag(false),
+        m_sptiMaxSublayersMinus1(temporalId) 
+  {
+    m_sptiSublayerIntervalScaleFactor.resize(MAX_TLAYER + 1, 0);
+    m_sptiSublayerSynthesizedPictureFlag.fill(false);
+  }
+
+  SEISourcePictureTimingInfo(const SEISourcePictureTimingInfo &sei);
+  virtual ~SEISourcePictureTimingInfo() {}
+
+  bool m_sptiSEIEnabled;
+  bool m_sptiSourceTimingEqualsOutputTimingFlag;
+  uint32_t m_sptiSourceType;
+  uint32_t m_sptiTimeScale;
+  uint32_t m_sptiNumUnitsInElementalInterval;
+  bool m_sptiDirectionFlag;
+  bool m_sptiCancelFlag;
+  bool m_sptiPersistenceFlag;
+  bool m_sptiSourceTypePresentFlag;
+  uint32_t m_sptiMaxSublayersMinus1;
+  std::vector<uint32_t> m_sptiSublayerIntervalScaleFactor;
+  std::array<bool, MAX_TLAYER + 1> m_sptiSublayerSynthesizedPictureFlag;
 };
 #endif
 
