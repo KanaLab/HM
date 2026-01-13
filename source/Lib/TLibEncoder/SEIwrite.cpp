@@ -1813,33 +1813,33 @@ void SEIWriter::xWriteSEIDigitallySignedContentVerification(const SEIDigitallySi
 #if JVET_AK2006_SPTI_SEI_MESSAGE
 void SEIWriter::xWriteSEISourcePictureTimingInfo(const SEISourcePictureTimingInfo &sei) 
 {
-    WRITE_FLAG(sei.m_sptiCancelFlag, "spti_cancel_flag");
-    if (!sei.m_sptiCancelFlag) 
+  WRITE_FLAG(sei.m_sptiCancelFlag, "spti_cancel_flag");
+  if (!sei.m_sptiCancelFlag)
+  {
+    WRITE_FLAG(sei.m_sptiPersistenceFlag, "spti_persistance_flag");
+    WRITE_FLAG(sei.m_sptiSourceTimingEqualsOutputTimingFlag, "spti_source_timing_equals_output_timing_flag");
+    if (!sei.m_sptiSourceTimingEqualsOutputTimingFlag)
     {
-        WRITE_FLAG(sei.m_sptiPersistenceFlag, "spti_persistance_flag");
-        WRITE_FLAG(sei.m_sptiSourceTimingEqualsOutputTimingFlag, "spti_source_timing_equals_output_timing_flag");
-        if (!sei.m_sptiSourceTimingEqualsOutputTimingFlag) 
-        {
-            WRITE_FLAG(sei.m_sptiSourceTypePresentFlag,"spti_source_type_present_flag");
-            if (sei.m_sptiSourceTypePresentFlag) 
-            {
-                WRITE_CODE(sei.m_sptiSourceType, 16, "spti_source_type");
-            }
-            WRITE_CODE(sei.m_sptiTimeScale, 32, "spti_time_scale");
-            WRITE_CODE(sei.m_sptiNumUnitsInElementalInterval, 32, "spti_num_units_in_elemental_interval");
-            WRITE_FLAG(sei.m_sptiDirectionFlag, "spti_direction_flag");
-            if (sei.m_sptiPersistenceFlag) 
-            {
-                WRITE_CODE(sei.m_sptiMaxSublayersMinus1, 3, "spti_max_sublayers_minus_1");
-            }
-            int sptiMinTemporalSublayer = (sei.m_sptiPersistenceFlag ? 0 : sei.m_sptiMaxSublayersMinus1);
-            for (int i = sptiMinTemporalSublayer; i <= sei.m_sptiMaxSublayersMinus1; i++) 
-            {
-                WRITE_UVLC(sei.m_sptiSublayerIntervalScaleFactor[i],"spti_sublayer_interval_scale_factor");
-                WRITE_FLAG(sei.m_sptiSublayerSynthesizedPictureFlag[i],"spti_sublayer_synthesized_picture_flag");
-            }
-        }
+      WRITE_FLAG(sei.m_sptiSourceTypePresentFlag,"spti_source_type_present_flag");
+      if (sei.m_sptiSourceTypePresentFlag)
+      {
+        WRITE_CODE(sei.m_sptiSourceType, 16, "spti_source_type");
+      }
+      WRITE_CODE(sei.m_sptiTimeScale, 32, "spti_time_scale");
+      WRITE_CODE(sei.m_sptiNumUnitsInElementalInterval, 32, "spti_num_units_in_elemental_interval");
+      WRITE_FLAG(sei.m_sptiDirectionFlag, "spti_direction_flag");
+      if (sei.m_sptiPersistenceFlag)
+      {
+        WRITE_CODE(sei.m_sptiMaxSublayersMinus1, 3, "spti_max_sublayers_minus_1");
+      }
+      int sptiMinTemporalSublayer = (sei.m_sptiPersistenceFlag ? 0 : sei.m_sptiMaxSublayersMinus1);
+      for (int i = sptiMinTemporalSublayer; i <= sei.m_sptiMaxSublayersMinus1; i++)
+      {
+        WRITE_UVLC(sei.m_sptiSublayerIntervalScaleFactor[i],"spti_sublayer_interval_scale_factor");
+        WRITE_FLAG(sei.m_sptiSublayerSynthesizedPictureFlag[i],"spti_sublayer_synthesized_picture_flag");
+      }
     }
+  }
 }
 #endif
 //! \}

@@ -37,6 +37,7 @@
 #pragma once
 #include <list>
 #include <vector>
+#include <array>
 #include <cstring>
 #include <map>
 
@@ -1006,7 +1007,7 @@ public:
         m_sptiMaxSublayersMinus1(temporalId) 
   {
     m_sptiSublayerIntervalScaleFactor.resize(MAX_TLAYER + 1, 0);
-    m_sptiSublayerSynthesizedPictureFlag.resize(MAX_TLAYER + 1, false);
+    m_sptiSublayerSynthesizedPictureFlag.fill(false);
   }
 
   SEISourcePictureTimingInfo(const SEISourcePictureTimingInfo &sei);
@@ -1023,7 +1024,7 @@ public:
   bool m_sptiSourceTypePresentFlag;
   uint32_t m_sptiMaxSublayersMinus1;
   std::vector<uint32_t> m_sptiSublayerIntervalScaleFactor;
-  std::vector<bool> m_sptiSublayerSynthesizedPictureFlag;
+  std::array<bool, MAX_TLAYER + 1> m_sptiSublayerSynthesizedPictureFlag;
 };
 #endif
 
