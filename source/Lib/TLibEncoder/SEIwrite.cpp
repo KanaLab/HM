@@ -246,6 +246,14 @@ Void SEIWriter::xWriteSEIpayloadData(TComBitIf& bs, const SEI& sei, const TComSP
     xWriteSEIPhaseIndication(*static_cast<const SEIPhaseIndication *>(&sei));
     break;
 #endif
+
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+  case SEI::ENCODER_OPTIMIZATION_INFO:
+    xWriteSEIEncoderOptimizationInfo(*static_cast<const SEIEncoderOptimizationInfo *>(&sei));
+    break;
+#endif
+
+
 #if JVET_AK0107_MODALITY_INFORMATION
   case SEI::PayloadType::MODALITY_INFORMATION:
     xWriteSEIModalityInfo(*static_cast<const SEIModalityInfo *>(&sei));
@@ -260,6 +268,16 @@ Void SEIWriter::xWriteSEIpayloadData(TComBitIf& bs, const SEI& sei, const TComSP
     break;
   case SEI::PayloadType::DIGITALLY_SIGNED_CONTENT_VERIFICATION:
     xWriteSEIDigitallySignedContentVerification(*static_cast<const SEIDigitallySignedContentVerification *>(&sei));
+    break;
+#endif
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+  case SEI::PayloadType::PACKED_REGIONS_INFO:
+    xWriteSEIPackedRegionsInfo(*static_cast<const SEIPackedRegionsInfo*>(&sei));
+    break;
+#endif
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+  case SEI::PayloadType::SOURCE_PICTURE_TIMING_INFO:
+    xWriteSEISourcePictureTimingInfo(*static_cast<const SEISourcePictureTimingInfo *>(&sei));
     break;
 #endif
   default:
@@ -1260,6 +1278,61 @@ void SEIWriter::xWriteSEIPhaseIndication(const SEIPhaseIndication& sei)
   WRITE_CODE((uint32_t)sei.m_verPhaseDenMinus1, 8, "ver_phase_den_minus1");
 }
 #endif
+#if JVET_AL0061_ENCODER_OPTIMIZATION_INFORMATION_SEI
+void SEIWriter::xWriteSEIEncoderOptimizationInfo(const SEIEncoderOptimizationInfo &sei)
+{
+  WRITE_FLAG(sei.m_cancelFlag, "eoi_cancel_flag");
+  if (!sei.m_cancelFlag)
+  {
+    WRITE_FLAG(sei.m_persistenceFlag, "eoi_persistence_flag");
+    WRITE_CODE(sei.m_forHumanViewingIdc, 2, "eoi_for_human_viewing_idc");
+    WRITE_CODE(sei.m_forMachineAnalysisIdc, 2, "eoi_for_machine_analysis_idc");
+    WRITE_CODE(0, 2, "eoi_reserved_zero_2bits");
+    WRITE_CODE(sei.m_type, 16, "eoi_type");
+
+
+    if ((sei.m_type & EOI_OptimizationType::OBJECT_BASED_OPTIMIZATION) != 0)
+    {
+      WRITE_CODE(sei.m_objectBasedIdc, 16, "eoi_object_based_idc");
+      if (sei.m_objectBasedIdc & EOI_OBJECT_BASED::COARSER_QUANTIZATION)
+      {
+        WRITE_UVLC(sei.m_quantThresholdDelta, "eoi_quant_threshold_delta");
+        if (sei.m_quantThresholdDelta > 0)
+        {
+          WRITE_FLAG(sei.m_picQuantObjectFlag, "eoi_pic_quant_object_flag");
+        }
+      }
+    }
+    if ((sei.m_type & EOI_OptimizationType::TEMPORAL_RESAMPLING) != 0)
+    {
+      WRITE_FLAG(sei.m_temporalResamplingTypeFlag, "eoi_temporal_resampling_type_flag");
+      WRITE_UVLC(sei.m_numIntPics, "eoi_num_int_pics");
+      if (sei.m_temporalResamplingTypeFlag && sei.m_numIntPics > 0)
+      {
+        WRITE_FLAG(sei.m_srcPicFlag, "eoi_src_pic_flag");
+      }
+    }
+    if ((sei.m_type & EOI_OptimizationType::SPATIAL_RESAMPLING) != 0)
+    {
+      WRITE_FLAG(sei.m_origPicDimensionsFlag, "eoi_orig_pic_dimensions_flag");
+      if (sei.m_origPicDimensionsFlag)
+      {
+        WRITE_CODE(sei.m_origPicWidth, 16, "eoi_orig_pic_width");
+        WRITE_CODE(sei.m_origPicHeight, 16, "eoi_orig_pic_height");
+      }
+      else
+      {
+        WRITE_FLAG(sei.m_spatialResamplingTypeFlag, "eoi_spatial_resampling_type_flag");
+      }
+    }
+    if ((sei.m_type & EOI_OptimizationType::PRIVACY_PROTECTION_OPTIMIZATION) != 0)
+    {
+      WRITE_CODE(sei.m_privacyProtectionTypeIdc, 16, "eoi_privacy_protection_type_idc");
+      WRITE_CODE(sei.m_privacyProtectedInfoType, 8, "eoi_privacy_protected_info_type");
+    }
+  }
+}
+#endif
 
 #if JVET_AK0107_MODALITY_INFORMATION
 Void SEIWriter::xWriteSEIModalityInfo(const SEIModalityInfo& sei)
@@ -1815,6 +1888,107 @@ void SEIWriter::xWriteSEIDigitallySignedContentVerification(const SEIDigitallySi
   for (int i=0; i< sei.dscvSignature.size(); i++)
   {
     WRITE_CODE(sei.dscvSignature[i], 8, "dscv_signature");
+  }
+}
+#endif
+
+#if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
+void SEIWriter::xWriteSEIPackedRegionsInfo(const SEIPackedRegionsInfo& sei)
+{
+  WRITE_FLAG(sei.m_cancelFlag, "pri_cancel_flag");
+  if (!sei.m_cancelFlag)
+  {
+    WRITE_FLAG(sei.m_persistenceFlag, "pri_persistence_flag");
+    WRITE_UVLC(sei.m_numRegionsMinus1, "pri_num_regions_minus1");
+    WRITE_FLAG(sei.m_multilayerFlag, "pri_multilayer_flag");
+    WRITE_FLAG(sei.m_useMaxDimensionsFlag, "pri_use_max_dimensions_flag");
+    WRITE_CODE(sei.m_log2UnitSize, 4, "pri_log2_unit_size");
+    WRITE_CODE(sei.m_regionSizeLenMinus1, 4, "pri_region_size_len_minus1");
+    WRITE_FLAG(sei.m_regionIdPresentFlag, "pri_region_id_present_flag");
+    WRITE_FLAG(sei.m_targetPicParamsPresentFlag, "pri_target_pic_params_present_flag");
+    if (sei.m_targetPicParamsPresentFlag)
+    {
+      WRITE_CODE(sei.m_targetPicWidthMinus1, 16, "pri_target_pic_width_minus1");
+      WRITE_CODE(sei.m_targetPicHeightMinus1, 16, "pri_target_pic_height_minus1");
+    }
+    WRITE_UVLC(sei.m_numResamplingRatiosMinus1, "pri_num_resampling_ratios_minus1");
+    for (uint32_t i = 1; i <= sei.m_numResamplingRatiosMinus1; i++)
+    {
+      WRITE_UVLC(sei.m_resamplingWidthNumMinus1[i], "pri_resampling_width_num_minus1[i]");
+      WRITE_UVLC(sei.m_resamplingWidthDenomMinus1[i], "pri_resampling_width_denom_minus1[i]");
+      WRITE_FLAG(sei.m_fixedAspectRatioFlag[i], "pri_fixed_aspect_ratio_flag[i]");
+      if (!sei.m_fixedAspectRatioFlag[i])
+      {
+        WRITE_UVLC(sei.m_resamplingHeightNumMinus1[i], "pri_resampling_height_num_minus1[i]");
+        WRITE_UVLC(sei.m_resamplingHeightDenomMinus1[i], "pri_resampling_height_denom_minus1[i]");
+      }
+    }
+    for (uint32_t i = 0; i <= sei.m_numRegionsMinus1; i++)
+    {
+      if (sei.m_regionIdPresentFlag)
+      {
+        WRITE_UVLC(sei.m_regionId[i], "pri_region_id[i]");
+      }
+      if (sei.m_multilayerFlag)
+      {
+        WRITE_UVLC(sei.m_regionLayerId[i], "pri_region_layer_id[i]");
+        WRITE_FLAG(sei.m_regionIsALayerFlag[i], "pri_region_is_a_layer_flag[i]");
+      }
+      if (!sei.m_regionIsALayerFlag[i])
+      {
+        WRITE_CODE(sei.m_regionTopLeftInUnitsX[i], sei.m_regionSizeLenMinus1 + 1, "pri_region_top_left_in_units_x[i]");
+        WRITE_CODE(sei.m_regionTopLeftInUnitsY[i], sei.m_regionSizeLenMinus1 + 1, "pri_region_top_left_in_units_y[i]");
+        WRITE_CODE(sei.m_regionWidthInUnitsMinus1[i], sei.m_regionSizeLenMinus1 + 1, "pri_region_width_in_units_minus1[i]");
+        WRITE_CODE(sei.m_regionHeightInUnitsMinus1[i], sei.m_regionSizeLenMinus1 + 1, "pri_region_height_in_units_minus1[i]");
+      }
+      if (sei.m_numResamplingRatiosMinus1 > 0)
+      {
+        uint32_t codeLen = 0;
+        for (uint32_t i = sei.m_numResamplingRatiosMinus1; i != 0; i >>= 1)
+        {
+          codeLen++;
+        }
+        WRITE_CODE(sei.m_resamplingRatioIdx[i], codeLen, "pri_resampling_ratio_idx[i]");
+      }
+      if (sei.m_targetPicParamsPresentFlag)
+      {
+        WRITE_CODE(sei.m_targetRegionTopLeftInUnitsX[i], sei.m_regionSizeLenMinus1 + 1, "pri_target_region_top_left_in_units_x[i]");
+        WRITE_CODE(sei.m_targetRegionTopLeftInUnitsY[i], sei.m_regionSizeLenMinus1 + 1, "pri_target_region_top_left_in_units_y[i]");
+      }
+    }
+  }
+}
+#endif
+
+#if JVET_AK2006_SPTI_SEI_MESSAGE
+void SEIWriter::xWriteSEISourcePictureTimingInfo(const SEISourcePictureTimingInfo &sei) 
+{
+  WRITE_FLAG(sei.m_sptiCancelFlag, "spti_cancel_flag");
+  if (!sei.m_sptiCancelFlag)
+  {
+    WRITE_FLAG(sei.m_sptiPersistenceFlag, "spti_persistance_flag");
+    WRITE_FLAG(sei.m_sptiSourceTimingEqualsOutputTimingFlag, "spti_source_timing_equals_output_timing_flag");
+    if (!sei.m_sptiSourceTimingEqualsOutputTimingFlag)
+    {
+      WRITE_FLAG(sei.m_sptiSourceTypePresentFlag,"spti_source_type_present_flag");
+      if (sei.m_sptiSourceTypePresentFlag)
+      {
+        WRITE_CODE(sei.m_sptiSourceType, 16, "spti_source_type");
+      }
+      WRITE_CODE(sei.m_sptiTimeScale, 32, "spti_time_scale");
+      WRITE_CODE(sei.m_sptiNumUnitsInElementalInterval, 32, "spti_num_units_in_elemental_interval");
+      WRITE_FLAG(sei.m_sptiDirectionFlag, "spti_direction_flag");
+      if (sei.m_sptiPersistenceFlag)
+      {
+        WRITE_CODE(sei.m_sptiMaxSublayersMinus1, 3, "spti_max_sublayers_minus_1");
+      }
+      int sptiMinTemporalSublayer = (sei.m_sptiPersistenceFlag ? 0 : sei.m_sptiMaxSublayersMinus1);
+      for (int i = sptiMinTemporalSublayer; i <= sei.m_sptiMaxSublayersMinus1; i++)
+      {
+        WRITE_UVLC(sei.m_sptiSublayerIntervalScaleFactor[i],"spti_sublayer_interval_scale_factor");
+        WRITE_FLAG(sei.m_sptiSublayerSynthesizedPictureFlag[i],"spti_sublayer_synthesized_picture_flag");
+      }
+    }
   }
 }
 #endif
