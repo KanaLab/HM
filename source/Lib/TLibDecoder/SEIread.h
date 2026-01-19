@@ -153,6 +153,7 @@ protected:
   Void sei_read_svlc(std::ostream *pOS,                Int&  ruiCode, const TChar *pSymbolName);
   Void sei_read_flag(std::ostream *pOS,                UInt& ruiCode, const TChar *pSymbolName);
   void sei_read_string(std::ostream* os,           std::string& code, const TChar* symbolName);
+  bool xPayloadExtensionPresent();
 
 };
 
