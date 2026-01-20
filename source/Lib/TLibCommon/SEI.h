@@ -135,8 +135,8 @@ public:
 #if JVET_AJ0207_GFV
     GENERATIVE_FACE_VIDEO                = 223,
 #endif
-#if JVET_AK0239_GFVE
-    GENERATIVE_FACE_VIDEO_ENHANCEMENT    = 224,
+#if JVET_AK0239_GEFV
+    GENERATIVE_ENHANCEMENT_FACE_VIDEO    = 224,
 #endif
 #if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI
     PACKED_REGIONS_INFO                     = 226,
@@ -1461,11 +1461,11 @@ public:
   std::vector<uint32_t>    m_matrixHeightstore;
 };
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
 class SEIGenerativeFaceVideoEnhancement : public SEI
 {
 public:
-  PayloadType payloadType() const { return PayloadType::GENERATIVE_FACE_VIDEO_ENHANCEMENT; }
+  PayloadType payloadType() const { return PayloadType::GENERATIVE_ENHANCEMENT_FACE_VIDEO; }
   SEIGenerativeFaceVideoEnhancement() {}
   SEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceVideoEnhancement & sei);
   virtual ~SEIGenerativeFaceVideoEnhancement() {}

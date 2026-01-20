@@ -37,7 +37,7 @@
 #include "TLibCommon/TComSlice.h"
 #include "TLibCommon/TComPicYuv.h"
 #include "SEIwrite.h"
-#if JVET_AK0239_GFVE || JVET_AJ0207_GFV
+#if JVET_AK0239_GEFV || JVET_AJ0207_GFV
 #include <math.h>
 #endif
 
@@ -277,8 +277,8 @@ Void SEIWriter::xWriteSEIpayloadData(TComBitIf& bs, const SEI& sei, const TComSP
     xWriteSEIGenerativeFaceVideo(*static_cast<const SEIGenerativeFaceVideo*>(&sei));
     break;
 #endif
-#if JVET_AK0239_GFVE
-  case SEI::PayloadType::GENERATIVE_FACE_VIDEO_ENHANCEMENT:
+#if JVET_AK0239_GEFV
+  case SEI::PayloadType::GENERATIVE_ENHANCEMENT_FACE_VIDEO:
     xWriteSEIGenerativeFaceVideoEnhancement(*static_cast<const SEIGenerativeFaceVideoEnhancement*>(&sei));
     break;
 #endif
@@ -2295,17 +2295,17 @@ void SEIWriter::xWriteSEIGenerativeFaceVideo(const SEIGenerativeFaceVideo &sei)
   }
 }
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
 Void SEIWriter::xWriteSEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceVideoEnhancement &sei)
 {
   uint32_t basePicFlag = 0;
-  WRITE_UVLC(sei.m_id, "gfve_id");
-  WRITE_UVLC(sei.m_gfvid, "gfve_gfv_id");
-  WRITE_UVLC(sei.m_gfvcnt, "gfve_gfv_cnt");
+  WRITE_UVLC(sei.m_id, "gefv_id");
+  WRITE_UVLC(sei.m_gfvid, "gefv_gfv_id");
+  WRITE_UVLC(sei.m_gfvcnt, "gefv_gfv_cnt");
 
   if (sei.m_gfvcnt == 0)
   {
-    WRITE_FLAG(sei.m_basePicFlag, "gfve_base_picture_flag");
+    WRITE_FLAG(sei.m_basePicFlag, "gefv_base_picture_flag");
     basePicFlag = sei.m_basePicFlag;
   }
   else
@@ -2314,23 +2314,23 @@ Void SEIWriter::xWriteSEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceV
   }
   if (basePicFlag)
   {
-    WRITE_FLAG(sei.m_nnPresentFlag, "gfve_nnPresentFlag");
+    WRITE_FLAG(sei.m_nnPresentFlag, "gefv_nnPresentFlag");
     if (sei.m_nnPresentFlag)
     {
-      WRITE_UVLC(sei.m_nnModeIdc, "gfve_mode_idc");
+      WRITE_UVLC(sei.m_nnModeIdc, "gefv_mode_idc");
       if (sei.m_nnModeIdc == 1)
       {
         while (m_pcBitIf->getNumberOfWrittenBits() % 8 != 0)
         {
-          WRITE_FLAG(0, "gfve_nn_alignment_zero_bit_a");
+          WRITE_FLAG(0, "gefv_nn_alignment_zero_bit_a");
         }
-        WRITE_STRING(sei.m_nnTagURI, "gfve_uri_tag");
-        WRITE_STRING(sei.m_nnURI, "gfve_uri");
+        WRITE_STRING(sei.m_nnTagURI, "gefv_uri_tag");
+        WRITE_STRING(sei.m_nnURI, "gefv_uri");
       }
     }
   }
   // Matrix Parameters
-  WRITE_FLAG(sei.m_matrixPresentFlag, "gfve_matrix_present_flag");
+  WRITE_FLAG(sei.m_matrixPresentFlag, "gefv_matrix_present_flag");
   if (sei.m_matrixPresentFlag)
   {
     std::vector<std::vector<std::vector<double>>>   gfveMatrixElementRec;
@@ -2340,16 +2340,16 @@ Void SEIWriter::xWriteSEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceV
     std::vector<uint32_t> matrixWidthVec;
     if (!basePicFlag)
     {
-      WRITE_FLAG(sei.m_matrixPredFlag, "gfve_matrix_pred_flag");
+      WRITE_FLAG(sei.m_matrixPredFlag, "gefv_matrix_pred_flag");
     }
     if (!sei.m_matrixPredFlag)
     {
       uint32_t gfveMatrixElementPrecisionFactorMinus1 = sei.m_matrixElementPrecisionFactor - 1;
       assert(gfveMatrixElementPrecisionFactorMinus1 >= 0 && gfveMatrixElementPrecisionFactorMinus1 <= 31);
-      WRITE_UVLC(gfveMatrixElementPrecisionFactorMinus1, "gfve_matrix_element_precision_factor_minus1");
+      WRITE_UVLC(gfveMatrixElementPrecisionFactorMinus1, "gefv_matrix_element_precision_factor_minus1");
       uint32_t gfveNumMatricesMinus1 = sei.m_numMatrices - 1;
       assert(gfveNumMatricesMinus1 >= 0 && gfveNumMatricesMinus1 <=(1 << 10) - 1);
-      WRITE_UVLC(gfveNumMatricesMinus1, "gfve_num_matrices_minus1");
+      WRITE_UVLC(gfveNumMatricesMinus1, "gefv_num_matrices_minus1");
       numMatrices = gfveNumMatricesMinus1 + 1;
       matrixElementPrecisionFactor = gfveMatrixElementPrecisionFactorMinus1 + 1;
       if (basePicFlag)
@@ -2360,9 +2360,9 @@ Void SEIWriter::xWriteSEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceV
       for (uint32_t j = 0; j <= gfveNumMatricesMinus1; j++)
       {
         uint32_t gfveMatrixHeightMinus1 = sei.m_matrixHeight[j] - 1;
-        WRITE_UVLC(gfveMatrixHeightMinus1, "gfve_matrix_height_minus1");
+        WRITE_UVLC(gfveMatrixHeightMinus1, "gefv_matrix_height_minus1");
         uint32_t gfveMatrixWidthMinus1 = sei.m_matrixWidth[j] - 1;
-        WRITE_UVLC(gfveMatrixWidthMinus1, "gfve_matrix_width_minus1");
+        WRITE_UVLC(gfveMatrixWidthMinus1, "gefv_matrix_width_minus1");
         matrixHeightVec.push_back(sei.m_matrixHeight[j]);
         matrixWidthVec.push_back(sei.m_matrixWidth[j]);
         if (basePicFlag && doUpdateGFVEmatrix)
@@ -2392,15 +2392,15 @@ Void SEIWriter::xWriteSEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceV
             double curMatrixElementAbs = fabs(sei.m_matrixElement[j][k][l]);
             uint32_t curMatrixElementAbsInt = (int)(curMatrixElementAbs);
             assert(curMatrixElementAbsInt >= 0 && curMatrixElementAbsInt <= 4294967294);
-            WRITE_UVLC(curMatrixElementAbsInt, "gfve_matrix_element_int");
+            WRITE_UVLC(curMatrixElementAbsInt, "gefv_matrix_element_int");
             double curMatrixElementAbsDecimal = curMatrixElementAbs - curMatrixElementAbsInt;
             assert(curMatrixElementAbsDecimal >= 0);
             int curMatrixElementAbsDecIntValue = Clip3(0, (1 << matrixElementPrecisionFactor) - 1, (int)(curMatrixElementAbsDecimal * (1 << matrixElementPrecisionFactor) + 0.5));
-            WRITE_CODE(curMatrixElementAbsDecIntValue, matrixElementPrecisionFactor, "gfve_matrix_element_dec");
+            WRITE_CODE(curMatrixElementAbsDecIntValue, matrixElementPrecisionFactor, "gefv_matrix_element_dec");
             const int signflag = sei.m_matrixElement[j][k][l] < 0;
             if (curMatrixElementAbsInt || curMatrixElementAbsDecIntValue)
             {
-              WRITE_FLAG(signflag, "gfve_matrix_element_sign_flag");
+              WRITE_FLAG(signflag, "gefv_matrix_element_sign_flag");
             }
             double matrixElementAbsRec = (double)(curMatrixElementAbsInt + (((double)curMatrixElementAbsDecIntValue) / (1 << matrixElementPrecisionFactor)));
             gfveMatrixElementRec[j][k].push_back(signflag ? -matrixElementAbsRec : matrixElementAbsRec);
@@ -2410,15 +2410,15 @@ Void SEIWriter::xWriteSEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceV
             double curMatrixElementAbs = fabs(sei.m_matrixElement[j][k][l] - (sei.m_gfvcnt == 0 ? baseGfveMatrixRec[j][k][l] : prevGfveMatrixRec[j][k][l]));
             uint32_t curMatrixElementAbsInt = (int)curMatrixElementAbs;
             assert(curMatrixElementAbsInt >= 0 && curMatrixElementAbsInt <= 4294967294);
-            WRITE_UVLC(curMatrixElementAbsInt, "gfve_matrix_delta_element_int");
+            WRITE_UVLC(curMatrixElementAbsInt, "gefv_matrix_delta_element_int");
             double curMatrixElementAbsDecimal = curMatrixElementAbs - curMatrixElementAbsInt;
             assert(curMatrixElementAbsDecimal >= 0);
             int curMatrixElementAbsDecIntValue = (int)(curMatrixElementAbsDecimal* (1 << matrixElementPrecisionFactor) + 0.5);
-            WRITE_CODE(curMatrixElementAbsDecIntValue, matrixElementPrecisionFactor, "gfve_matrix_delta_element_dec");
+            WRITE_CODE(curMatrixElementAbsDecIntValue, matrixElementPrecisionFactor, "gefv_matrix_delta_element_dec");
             const int signflag = (sei.m_matrixElement[j][k][l] - (sei.m_gfvcnt == 0 ? baseGfveMatrixRec[j][k][l] : prevGfveMatrixRec[j][k][l])) < 0;
             if (curMatrixElementAbsInt || curMatrixElementAbsDecIntValue)
             {
-              WRITE_FLAG(signflag, "gfve_matrix_delta_element_sign_flag");
+              WRITE_FLAG(signflag, "gefv_matrix_delta_element_sign_flag");
             }
             double matrixElementAbsRec = (double)(curMatrixElementAbsInt + (((double)curMatrixElementAbsDecIntValue) / (1 << baseMatrixElementPrecisionFactor)));
             gfveMatrixElementRec[j][k].push_back((signflag ? -matrixElementAbsRec : matrixElementAbsRec) + (sei.m_gfvcnt == 0 ? baseGfveMatrixRec[j][k][l] : prevGfveMatrixRec[j][k][l]));
@@ -2445,7 +2445,7 @@ Void SEIWriter::xWriteSEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceV
   double gfveRightPupilCoordinateXRec;
   double gfveRightPupilCoordinateYRec;
   assert(sei.m_pupilPresentIdx >= 0 && sei.m_pupilPresentIdx <= 3);
-  WRITE_CODE(sei.m_pupilPresentIdx, 2, "gfve_pupil_coordinate_present_idx");
+  WRITE_CODE(sei.m_pupilPresentIdx, 2, "gefv_pupil_coordinate_present_idx");
   if (sei.m_pupilPresentIdx != 0)
   {
     if (basePicFlag)
@@ -2454,7 +2454,7 @@ Void SEIWriter::xWriteSEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceV
 
       uint32_t gfvePupilCoordinatePrecisionFactorMinus1 = sei.m_pupilCoordinatePrecisionFactor - 1;
       assert(gfvePupilCoordinatePrecisionFactorMinus1 >= 0 && gfvePupilCoordinatePrecisionFactorMinus1 <= 31);
-      WRITE_UVLC(gfvePupilCoordinatePrecisionFactorMinus1, "gfve_pupil_coordinate_precision_factor_minus1");
+      WRITE_UVLC(gfvePupilCoordinatePrecisionFactorMinus1, "gefv_pupil_coordinate_precision_factor_minus1");
     }
     assert(checkBasePicPupilPresentIdx);
   }
@@ -2532,11 +2532,11 @@ Void SEIWriter::xWriteSEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceV
     {
       while (m_pcBitIf->getNumberOfWrittenBits() % 8 != 0)
       {
-        WRITE_FLAG(0, "gfve_nn_alignment_zero_bit_b");
+        WRITE_FLAG(0, "gefv_nn_alignment_zero_bit_b");
       }
       for (long i = 0; i < sei.m_payloadLength; i++)
       {
-        WRITE_SCODE(sei.m_payloadByte[i], 8, "gfve_nn_payload_byte[i]");
+        WRITE_SCODE(sei.m_payloadByte[i], 8, "gefv_nn_payload_byte[i]");
       }
     }
   }
@@ -2549,16 +2549,16 @@ double SEIWriter::xWriteSEIPupilCoordinate(double coordinate, double refCoordina
 
   assert(std::string(eye) == "left" || std::string(eye) == "right");
   assert(std::string(axis) == "x" || std::string(axis) == "y");
-  std::string checkMessage = "The value of gfve_pupil_" + std::string(eye) + "_eye_d" + std::string(axis) + "_coordinate_abs shall be be 0 to 1 << (gfve_pupil_coordinate_precision_factor_minus1 + 2), inclusive";
+  std::string checkMessage = "The value of gefv_pupil_" + std::string(eye) + "_eye_d" + std::string(axis) + "_coordinate_abs shall be be 0 to 1 << (gefv_pupil_coordinate_precision_factor_minus1 + 2), inclusive";
   assert(absIntValue >= 0 && absIntValue <=(1 << (precisionFactor + 1)));
-  std::string absSymbolName = "gfve_pupil_" + std::string(eye) + "_eye_d" + std::string(axis) + "_coordinate_abs";
+  std::string absSymbolName = "gefv_pupil_" + std::string(eye) + "_eye_d" + std::string(axis) + "_coordinate_abs";
   WRITE_UVLC(absIntValue, absSymbolName.c_str());
 
   const int signFlag = (coordinate - refCoordinate < 0) ? 1 : 0;
   if (absIntValue)
   {
   
-    std::string signSymbolName = "gfve_pupil_" + std::string(eye) + "_eye_d" + std::string(axis) + "_coordinate_sign_flag";
+    std::string signSymbolName = "gefv_pupil_" + std::string(eye) + "_eye_d" + std::string(axis) + "_coordinate_sign_flag";
     WRITE_FLAG(signFlag, signSymbolName.c_str());
   }
   double deltaAbsRec = static_cast<double>(absIntValue) / (1 << precisionFactor);

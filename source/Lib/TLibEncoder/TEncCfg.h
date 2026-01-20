@@ -664,7 +664,7 @@ protected:
   std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>>   m_generativeFaceVideoSEIMatrixElement;
   std::string                          m_generativeFaceVideoSEIPayloadFilename;
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
   bool                                 m_generativeFaceVideoEnhancementEnabled;
   uint32_t                             m_generativeFaceVideoEnhancementSEINumber;
   bool                                 m_generativeFaceVideoEnhancementSEIBasePicFlag;
@@ -1746,7 +1746,7 @@ public:
   void              setGenerativeFaceVideoSEIPayloadFilename(const std::string &payloadFilename) { m_generativeFaceVideoSEIPayloadFilename = payloadFilename; }
   const std::string getGenerativeFaceVideoSEIPayloadFilename()                                                                                      const { return m_generativeFaceVideoSEIPayloadFilename; }
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
   void              setGenerativeFaceVideoEnhancementSEIEnabled(bool enabledFlag) { m_generativeFaceVideoEnhancementEnabled = enabledFlag; }
   bool              getGenerativeFaceVideoEnhancementSEIEnabled()                                    const { return m_generativeFaceVideoEnhancementEnabled; }
   void              setGenerativeFaceVideoEnhancementSEINumber(uint32_t number) { m_generativeFaceVideoEnhancementSEINumber = number; }

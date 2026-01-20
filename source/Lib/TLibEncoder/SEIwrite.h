@@ -174,7 +174,7 @@ protected:
   bool doUpdateGFVcoordinate = false;
   bool doUpdateGFVmatrix = false;
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
   Void xWriteSEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceVideoEnhancement& sei);
   double xWriteSEIPupilCoordinate(double coordinate, double refCoordinate, int precisionFactor, const char* eye, const char* axis);
   std::vector<std::vector<std::vector<double>>> prevGfveMatrixRec;

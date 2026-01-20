@@ -691,7 +691,7 @@ Void TAppEncTop::xInitLibCfg()
   m_cTEncTop.setGenerativeFaceVideoSEIMatrixElement(m_generativeFaceVideoSEIMatrixElement);
   m_cTEncTop.setGenerativeFaceVideoSEIPayloadFilename(m_generativeFaceVideoSEIPayloadFilename);
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
   m_cTEncTop.setGenerativeFaceVideoEnhancementSEIEnabled(m_generativeFaceVideoEnhancementEnabled);
   m_cTEncTop.setGenerativeFaceVideoEnhancementSEINumber(m_generativeFaceVideoEnhancementSEINumber);
   m_cTEncTop.setGenerativeFaceVideoEnhancementSEIId(m_generativeFaceVideoEnhancementSEIId);

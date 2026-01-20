@@ -126,7 +126,7 @@
 #endif
 #define JVET_AK0107_MODALITY_INFORMATION                  1 // Implementation of Modality Information SEI message
 #define JVET_AJ0207_GFV                                   1 //generative face video (GFV) SEI
-#define JVET_AK0239_GFVE                                  1 //generative face video enhancement (GFVE) SEI
+#define JVET_AK0239_GEFV                                  1 //generative enhancement face video (GEFV) SEI
 #define JVET_AK2006_SPTI_SEI_MESSAGE                      1 // Implementation of Source Picture Timing Information SEI message
 
 // ====================================================================================================================

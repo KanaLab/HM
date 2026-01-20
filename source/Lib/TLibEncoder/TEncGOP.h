@@ -243,7 +243,7 @@ protected:
 #if JVET_AJ0207_GFV
   Void xCreateGenerativeFaceVideoSEIMessages(SEIMessages& seiMessage);
 #endif 
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
   Void xCreateGenerativeFaceVideoEnhancementSEIMessages(SEIMessages& seiMessage);
 #endif 
   Int xWriteVPS (AccessUnit &accessUnit, const TComVPS *vps);

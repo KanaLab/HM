@@ -121,8 +121,8 @@ const std::vector<SEI::PayloadType> SEI::suffix_sei_messages({
   #if JVET_AJ0207_GFV
   SEI::GENERATIVE_FACE_VIDEO,
 #endif
-#if JVET_AK0239_GFVE
-  SEI::GENERATIVE_FACE_VIDEO_ENHANCEMENT
+#if JVET_AK0239_GEFV
+  SEI::GENERATIVE_ENHANCEMENT_FACE_VIDEO
 #endif
 });
 
@@ -380,7 +380,7 @@ SEIGenerativeFaceVideo::SEIGenerativeFaceVideo(const SEIGenerativeFaceVideo& sei
     m_matrixHeightstore = sei.m_matrixHeightstore;
 }
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
 SEIGenerativeFaceVideoEnhancement::SEIGenerativeFaceVideoEnhancement(const SEIGenerativeFaceVideoEnhancement& sei)
 {
     m_number = sei.m_number;
@@ -499,8 +499,8 @@ const TChar *SEI::getSEIMessageString(SEI::PayloadType payloadType)
 #if JVET_AJ0207_GFV
     case SEI::GENERATIVE_FACE_VIDEO:                return "Generative face video";
 #endif
-#if JVET_AK0239_GFVE
-    case SEI::GENERATIVE_FACE_VIDEO_ENHANCEMENT:    return "Generative face video enhancement";
+#if JVET_AK0239_GEFV
+    case SEI::GENERATIVE_ENHANCEMENT_FACE_VIDEO:    return "Generative enhancement face video";
 #endif
 #if JVET_AK2006_SPTI_SEI_MESSAGE
     case SEI::SOURCE_PICTURE_TIMING_INFO:           return "Source picture timing info";

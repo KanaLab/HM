@@ -132,7 +132,7 @@ public:
 #if JVET_AJ0207_GFV
   Void initSEIGenerativeFaceVideo(SEIGenerativeFaceVideo* sei, int currframeindex);
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
   Void initSEIGenerativeFaceVideoEnhancement(SEIGenerativeFaceVideoEnhancement* sei, int currframeindex);
 #endif
 #if JVET_AK0140_PACKED_REGIONS_INFORMATION_SEI

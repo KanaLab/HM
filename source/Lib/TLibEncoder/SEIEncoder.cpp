@@ -1861,7 +1861,7 @@ Void SEIEncoder::initSEIGenerativeFaceVideo(SEIGenerativeFaceVideo *sei, int cur
     }
   }
 }
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
 Void SEIEncoder::initSEIGenerativeFaceVideoEnhancement(SEIGenerativeFaceVideoEnhancement *sei, int currframeindex)
 {
   assert(m_isInitialized);

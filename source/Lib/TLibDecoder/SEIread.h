@@ -157,7 +157,7 @@ protected:
   std::vector<std::vector<std::vector<std::vector<double>>>> baseMatrix;
   std::vector<std::vector<std::vector<std::vector<double>>>> prevMatrix;
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
   void xParseSEIGenerativeFaceVideoEnhancement(SEIGenerativeFaceVideoEnhancement &sei, uint32_t payloadSize, std::ostream* pDecodedMessageOutputStream);
   double xParseSEIPupilCoordinate(std::ostream *pOS, double refCoordinate, int precisionFactor, const char* eye, const char* axis);
   uint32_t                                                   gfveBaseMatrixElementPrecisionFactor;

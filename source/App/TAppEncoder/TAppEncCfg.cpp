@@ -797,7 +797,7 @@ Bool TAppEncCfg::parseCfg( Int argc, TChar* argv[] )
   SMultiValueInput<uint32_t>   cfg_generativeFaceVideoSEIChromaKeyThrPresentFlag(0, 2550, 0, 102400);
   SMultiValueInput<uint32_t>   cfg_generativeFaceVideoSEIChromaKeyThrValue(0, 2550, 0, 102400);
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
   SMultiValueInput<uint32_t>   cfg_generativeFaceVideoEnhancementSEIId(0, 2550, 0, 102400);
   SMultiValueInput<uint32_t>   cfg_generativeFaceVideoEnhancementSEIGFVId(0, 2550, 0, 102400);
   SMultiValueInput<uint32_t>   cfg_generativeFaceVideoEnhancementSEIGFVCnt(0, 2550, 0, 102400);
@@ -1505,19 +1505,19 @@ Bool TAppEncCfg::parseCfg( Int argc, TChar* argv[] )
   ("SEIGenerativeFaceVideoChromaKeyThrPresentFlag", cfg_generativeFaceVideoSEIChromaKeyThrPresentFlag, cfg_generativeFaceVideoSEIChromaKeyThrPresentFlag, "indicates that the syntax element gfv_chroma_thr_value[ i ] is present")
   ("SEIGenerativeFaceVideoChromaKeyThrValue", cfg_generativeFaceVideoSEIChromaKeyThrValue, cfg_generativeFaceVideoSEIChromaKeyThrValue, "specifies the i-th chroma key threshold value")
 #endif
-#if JVET_AK0239_GFVE
-  ("SEIGenerativeFaceVideoEnhancementEnabled", m_generativeFaceVideoEnhancementEnabled, false, "Control use of the Generative Face Video Enhancement SEI on current picture")
-  ("SEIGenerativeFaceVideoEnhancementNumber", m_generativeFaceVideoEnhancementSEINumber, 0u, "Total number of Generative Face Video Enhancement SEI to be carried")
+#if JVET_AK0239_GEFV
+  ("SEIGenerativeFaceVideoEnhancementEnabled", m_generativeFaceVideoEnhancementEnabled, false, "Control use of the Generative Enhancement Face Video SEI on current picture")
+  ("SEIGenerativeFaceVideoEnhancementNumber", m_generativeFaceVideoEnhancementSEINumber, 0u, "Total number of Generative Enhancement Face Video SEI to be carried")
   ("SEIGenerativeFaceVideoEnhancementBasePicFlag", m_generativeFaceVideoEnhancementSEIBasePicFlag, false, "Specifies whether to indicates the current decoded output picture corresponds to a base picture")
   ("SEIGenerativeFaceVideoEnhancementNNPresentFlag", m_generativeFaceVideoEnhancementSEINNPresentFlag, false, "indicates a neural network that may be used as a EnhancerNN( ) ")
   ("SEIGenerativeFaceVideoEnhancementNNModeIdc", m_generativeFaceVideoEnhancementSEINNModeIdc, 0u, "specify a neural network that may be used as a EnhancerNN( )")
   ("SEIGenerativeFaceVideoEnhancementNNTagURI", m_generativeFaceVideoEnhancementSEINNTagURI, std::string(""), "specify path to gfv_uri_tag")
   ("SEIGenerativeFaceVideoEnhancementNNURI", m_generativeFaceVideoEnhancementSEINNURI, std::string(""), "specify path to gfv_uri")
-  ("SEIGenerativeFaceVideoEnhancementId", cfg_generativeFaceVideoEnhancementSEIId, cfg_generativeFaceVideoEnhancementSEIId, "Target id of Generative Face Video Enhancement SEI on current picture")
-  ("SEIGenerativeFaceVideoEnhancementGFVCnt", cfg_generativeFaceVideoEnhancementSEIGFVCnt, cfg_generativeFaceVideoEnhancementSEIGFVCnt, "Target cnt of Generative Face Video Enhancement SEI on current picture")
-  ("SEIGenerativeFaceVideoEnhancementGFVId", cfg_generativeFaceVideoEnhancementSEIGFVId, cfg_generativeFaceVideoEnhancementSEIGFVId, "Target id of Generative Face Video Enhancement SEI on current picture")
-  ("SEIGenerativeFaceVideoEnhancementMatrixPredFlag", cfg_generativeFaceVideoEnhancementSEIMatrixPredFlag, cfg_generativeFaceVideoEnhancementSEIMatrixPredFlag, "indicates whether to use difference operation for GFVE matrix ")
-  ("SEIGenerativeFaceVideoEnhancementMatrixPresentFlag", cfg_generativeFaceVideoEnhancementSEIMatrixPresentFlag, cfg_generativeFaceVideoEnhancementSEIMatrixPresentFlag, "Specifies whether to carry gfve matrix parameter ")
+  ("SEIGenerativeFaceVideoEnhancementId", cfg_generativeFaceVideoEnhancementSEIId, cfg_generativeFaceVideoEnhancementSEIId, "Target id of Generative Enhancement Face Video SEI on current picture")
+  ("SEIGenerativeFaceVideoEnhancementGFVCnt", cfg_generativeFaceVideoEnhancementSEIGFVCnt, cfg_generativeFaceVideoEnhancementSEIGFVCnt, "Target cnt of Generative Enhancement Face Video SEI on current picture")
+  ("SEIGenerativeFaceVideoEnhancementGFVId", cfg_generativeFaceVideoEnhancementSEIGFVId, cfg_generativeFaceVideoEnhancementSEIGFVId, "Target id of Generative Enhancement Face Video SEI on current picture")
+  ("SEIGenerativeFaceVideoEnhancementMatrixPredFlag", cfg_generativeFaceVideoEnhancementSEIMatrixPredFlag, cfg_generativeFaceVideoEnhancementSEIMatrixPredFlag, "indicates whether to use difference operation for GEFV matrix ")
+  ("SEIGenerativeFaceVideoEnhancementMatrixPresentFlag", cfg_generativeFaceVideoEnhancementSEIMatrixPresentFlag, cfg_generativeFaceVideoEnhancementSEIMatrixPresentFlag, "Specifies whether to carry gefv matrix parameter ")
   ("SEIGenerativeFaceVideoEnhancementMatrixElementPrecisionFactor", cfg_generativeFaceVideoEnhancementSEIMatrixElementPrecisionFactor, cfg_generativeFaceVideoEnhancementSEIMatrixElementPrecisionFactor, "Specifies the precision factor to process the facial matrix paramters (decimal part)")
   ("SEIGenerativeFaceVideoEnhancementNumMatrices", cfg_generativeFaceVideoEnhancementSEINumMatrices, cfg_generativeFaceVideoEnhancementSEINumMatrices, "the number of matrices of the i-th matrix type")
   ("SEIGenerativeFaceVideoEnhancementMatrixWidth", cfg_generativeFaceVideoEnhancementSEIMatrixWidth, cfg_generativeFaceVideoEnhancementSEIMatrixWidth, "the width of matrices of the i-th matrix type")
@@ -2665,7 +2665,7 @@ Bool TAppEncCfg::parseCfg( Int argc, TChar* argv[] )
   }
 #endif
 
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
   if (m_generativeFaceVideoEnhancementEnabled)
   {
     assert(cfg_generativeFaceVideoEnhancementSEIId.values.size() == m_generativeFaceVideoEnhancementSEINumber);

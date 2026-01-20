@@ -1204,7 +1204,7 @@ Void TEncGOP::xCreateGenerativeFaceVideoSEIMessages(SEIMessages& seiMessages)
   }
 }
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
 Void TEncGOP::xCreateGenerativeFaceVideoEnhancementSEIMessages(SEIMessages& seiMessages)
 {
   for (int frameIndex = 0; frameIndex < m_pcCfg->getGenerativeFaceVideoEnhancementSEINumber(); frameIndex++)
@@ -2045,7 +2045,7 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
       xCreateGenerativeFaceVideoSEIMessages(trailingSeiMessages);
     }
 #endif
-#if JVET_AK0239_GFVE
+#if JVET_AK0239_GEFV
     if (writePS && m_pcCfg->getGenerativeFaceVideoEnhancementSEIEnabled())
     {
       xCreateGenerativeFaceVideoEnhancementSEIMessages(trailingSeiMessages);
