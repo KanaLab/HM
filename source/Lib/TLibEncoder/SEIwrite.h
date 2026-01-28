@@ -49,7 +49,11 @@ class TComBitIf;
 class SEIWriter:public SyntaxElementWriter
 {
 public:
-  SEIWriter() {};
+  SEIWriter()
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+    : m_SeiExtensionBitsPresentFlag(false)
+#endif
+  {};
   virtual ~SEIWriter() {};
 
   Void writeSEImessages(TComBitIf& bs, const SEIMessages &seiList, const TComSPS *sps, Bool isNested);
@@ -218,6 +222,10 @@ protected:
   Void  xTraceSEIHeader();
   Void  xTraceSEIMessageType(SEI::PayloadType payloadType);
   Void xWriteByteAlign();
+
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+  Bool m_SeiExtensionBitsPresentFlag;
+#endif
 #if JVET_AK2006_SPTI_SEI_MESSAGE
   void xWriteSEISourcePictureTimingInfo(const SEISourcePictureTimingInfo &sei);
 #endif

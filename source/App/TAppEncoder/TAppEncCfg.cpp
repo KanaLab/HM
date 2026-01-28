@@ -1322,6 +1322,10 @@ Bool TAppEncCfg::parseCfg( Int argc, TChar* argv[] )
   ("SEIFGCCompModelPresentComp0",                     m_fgcSEICompModelPresent[0],                       false, "Specifies the presense of film grain modelling on colour component 0.")
   ("SEIFGCCompModelPresentComp1",                     m_fgcSEICompModelPresent[1],                       false, "Specifies the presense of film grain modelling on colour component 1.")
   ("SEIFGCCompModelPresentComp2",                     m_fgcSEICompModelPresent[2],                       false, "Specifies the presense of film grain modelling on colour component 2.")
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+  ("SEIFGCPicWidthInLumaSamples",                     m_fgcSEIPicWidthInLumaSamples,                        0u, "Specifies the picture width in luma samples at which the film grain synthesis is intended to be applied.")
+  ("SEIFGCPicHeightInLumaSamples",                    m_fgcSEIPicHeightInLumaSamples,                       0u, "Specifies the picture height in luma samples at which the film grain synthesis is intended to be applied.")
+#endif
 #if JVET_X0048_X0103_FILM_GRAIN
   ("SEIFGCAnalysisEnabled",                           m_fgcSEIAnalysisEnabled,                           false, "Control adaptive film grain parameter estimation - film grain analysis")
   ("SEIFGCExternalMask",                              m_fgcSEIExternalMask,                       string( "" ), "Read external file with mask for film grain analysis. If empty string, use internally calculated mask.")
@@ -3598,6 +3602,14 @@ Void TAppEncCfg::xCheckParameter()
     xConfirmPara( m_nominalBlackLevelLumaCodeValue >= m_nominalWhiteLevelLumaCodeValue, "SEIToneMapNominalWhiteLevelLumaCodeValue shall be greater than SEIToneMapNominalBlackLevelLumaCodeValue");
     xConfirmPara( m_extendedWhiteLevelLumaCodeValue < m_nominalWhiteLevelLumaCodeValue, "SEIToneMapExtendedWhiteLevelLumaCodeValue shall be greater than or equal to SEIToneMapNominalWhiteLevelLumaCodeValue");
   }
+
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+  if (m_fgcSEIEnabled)
+  {
+    xConfirmPara(m_fgcSEIPicWidthInLumaSamples > 0 && m_fgcSEIPicHeightInLumaSamples == 0, "When SEIFGCPicWidthInLumaSamples is set, SEIFGCPicHeightInLumaSamples must also be set");
+    xConfirmPara(m_fgcSEIPicHeightInLumaSamples > 0 && m_fgcSEIPicWidthInLumaSamples == 0, "When SEIFGCPicHeightInLumaSamples is set, SEIFGCPicWidthInLumaSamples must also be set");
+  }
+#endif
 
   if (m_kneeSEIEnabled && !m_kneeFunctionInformationSEI.m_kneeFunctionCancelFlag)
   {

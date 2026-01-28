@@ -123,6 +123,21 @@ void SEIReader::sei_read_string(std::ostream* os, std::string& code, const TChar
   }
 }
 
+bool SEIReader::xPayloadExtensionPresent()
+{
+  if (getBitstream()->getNumBitsLeft() == 0)
+  {
+    return false;
+  }
+  else if (getBitstream()->getNumBitsLeft() > 8)
+  {
+    return true;
+  }
+
+  uint32_t remBits = getBitstream()->peekBits(getBitstream()->getNumBitsLeft());
+  return remBits != (1 << (getBitstream()->getNumBitsLeft() - 1));
+}
+
 static inline Void output_sei_message_header(SEI &sei, std::ostream *pDecodedMessageOutputStream, UInt payloadSize)
 {
   if (pDecodedMessageOutputStream)
@@ -927,6 +942,17 @@ Void SEIReader::xParseSEIFilmGrainCharacteristics(SEIFilmGrainCharacteristics& s
       }
     } // for c
     sei_read_flag( pDecodedMessageOutputStream, code, "film_grain_characteristics_persistence_flag" ); sei.m_filmGrainCharacteristicsPersistenceFlag = code!=0;
+#if JVET_AL0339_SPATIAL_RESOLUTION_FOR_FGC_SEI
+    if (xPayloadExtensionPresent())
+    {
+      sei_read_flag( pDecodedMessageOutputStream, code, "film_grain_spatial_resolution_present_flag" ); sei.m_fgSpatialResolutionPresentFlag = code!=0;
+      if (sei.m_fgSpatialResolutionPresentFlag)
+      {
+        sei_read_uvlc(pDecodedMessageOutputStream, code, "fg_pic_width_in_luma_samples"); sei.m_fgPicWidthInLumaSamples = code;
+        sei_read_uvlc(pDecodedMessageOutputStream, code, "fg_pic_height_in_luma_samples"); sei.m_fgPicHeightInLumaSamples = code;
+      }
+    }
+#endif
   } // cancel flag
 }
 
