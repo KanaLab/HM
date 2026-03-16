@@ -161,7 +161,8 @@ Distortion xSearchHistogram(const std::vector<Int> &histogramSource,
   const Int weightRange     = 10;
   const Int offsetRange     = 10;
   const Int maxOffset       = 1 << ((bHighPrecision == true) ? (bitDepth - 1) : 7);
-  const Int range           = bHighPrecision ? (1<<bitDepth) / 2 : 128;
+  // Fix: delta weight range is always [-128, 127], not bit-depth-dependent.
+  const Int range           = 128;
   const Int defaultWeight   = (1<<log2Denom);
   const Int minSearchWeight = std::max<Int>(initialWeight - weightRange, defaultWeight - range);
   const Int maxSearchWeight = std::min<Int>(initialWeight + weightRange+1, defaultWeight + range);
@@ -448,10 +449,15 @@ Bool WeightPredAnalysis::xUpdatingWPParameters(TComSlice *const slice, const Int
         }
 
         // Weighting factor limitation
+        // Fix: delta weight must be in [-128, 127] regardless of bit depth
+        // (ITU-T H.265 Sec 7.4.7.3). 'range' is for offsets only, not weights.
+        // VTM has the same bug but VVC (H.266 Sec 7.4.9) removed HighPrecisionOffsets
+        // for WP, so it is dead code there.
+        static const Int kMaxAbsDeltaWeight = 128; // spec: delta weight in [-128, 127]
         const Int defaultWeight = (1<<log2Denom);
         const Int deltaWeight   = (weight - defaultWeight);
 
-        if(deltaWeight >= range || deltaWeight < -range)
+        if(deltaWeight >= kMaxAbsDeltaWeight || deltaWeight < -kMaxAbsDeltaWeight)
         {
           return false;
         }
