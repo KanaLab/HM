@@ -1361,7 +1361,7 @@ Void TComTrQuant::xDeQuant(       TComTU        &rTu,
 
     if(rightShift > 0)
     {
-      const Intermediate_Int iAdd = 1 << (rightShift - 1);
+      const Intermediate_Int iAdd = Intermediate_Int(1) << (rightShift - 1);
 
       for( Int n = 0; n < numSamplesInBlock; n++ )
       {
@@ -1398,7 +1398,7 @@ Void TComTrQuant::xDeQuant(       TComTU        &rTu,
 
     if (rightShift > 0)
     {
-      const Intermediate_Int iAdd = 1 << (rightShift - 1);
+      const Intermediate_Int iAdd = Intermediate_Int(1) << (rightShift - 1);
 
       for( Int n = 0; n < numSamplesInBlock; n++ )
       {
@@ -2038,7 +2038,7 @@ Void TComTrQuant::xTransformSkip( Pel* piBlkResi, UInt uiStride, TCoeff* psCoeff
   else //for very high bit depths
   {
     iTransformShift = -iTransformShift;
-    const TCoeff offset = 1 << (iTransformShift - 1);
+    const TCoeff offset = TCoeff(1) << (iTransformShift - 1);
 
     for (UInt y = 0, coefficientIndex = 0; y < height; y++)
     {
@@ -3414,7 +3414,7 @@ Void TComTrQuant::invTrSkipDeQuantOneSample( TComTU &rTu, ComponentID compID, TC
 
     if(rightShift > 0)
     {
-      const Intermediate_Int iAdd      = 1 << (rightShift - 1);
+      const Intermediate_Int iAdd      = Intermediate_Int(1) << (rightShift - 1);
       const TCoeff           clipQCoef = TCoeff(Clip3<Intermediate_Int>(inputMinimum, inputMaximum, inSample));
       const Intermediate_Int iCoeffQ   = ((Intermediate_Int(clipQCoef) * piDequantCoef[uiPos]) + iAdd ) >> rightShift;
 
@@ -3440,7 +3440,7 @@ Void TComTrQuant::invTrSkipDeQuantOneSample( TComTU &rTu, ComponentID compID, TC
 
     if (rightShift > 0)
     {
-      const Intermediate_Int iAdd      = 1 << (rightShift - 1);
+      const Intermediate_Int iAdd      = Intermediate_Int(1) << (rightShift - 1);
       const TCoeff           clipQCoef = TCoeff(Clip3<Intermediate_Int>(inputMinimum, inputMaximum, inSample));
       const Intermediate_Int iCoeffQ   = (Intermediate_Int(clipQCoef) * scale + iAdd) >> rightShift;
 
